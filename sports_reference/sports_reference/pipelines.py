@@ -44,7 +44,7 @@ class PlaybyplayPipeline(object):
         self.file = open("play_by_play.csv", 'w')
         self.writer = csv.DictWriter(
             self.file,
-            fieldnames=["code", "time"],
+            fieldnames=["code", "quarter", "time", "home_play", "score", "visit_play"],
             lineterminator='\n'
         )
         self.writer.writeheader()

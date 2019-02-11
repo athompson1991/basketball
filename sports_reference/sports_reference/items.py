@@ -22,4 +22,8 @@ class GameItem(scrapy.Item):
 
 class PlaybyplayItem(scrapy.Item):
     code = scrapy.Field()
+    quarter = scrapy.Field()
     time = scrapy.Field()
+    home_play = scrapy.Field()
+    score = scrapy.Field()
+    visit_play = scrapy.Field()

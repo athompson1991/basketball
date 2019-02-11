@@ -30,11 +30,28 @@ class PlaybyplaySpider(scrapy.Spider):
         code = response.url.split("/")[-1][:-5]
         pbp_table = response.css("table#pbp")
         rows = pbp_table.xpath("//tr")
+        quarter = None
         for row in rows:
+            ids =  row.xpath("@id").extract()
+            if len(ids) > 0:
+                quarter = ids[0]
             td_ls = row.css('td')
-            if len(td_ls) > 0:
-                time = td_ls[0].extract()
-                item = PlaybyplayItem(code = code, time = time)
+            if len(td_ls) == 6:
+                time = td_ls[0].xpath("text()")[0].extract()
+                home_soup = bs4.BeautifulSoup(td_ls[1].extract())
+                home_play = home_soup.text
+                score = td_ls[3].xpath("text()")[0].extract()
+                visit_soup = bs4.BeautifulSoup(td_ls[5].extract())
+                visit_play = visit_soup.text
+
+                item = PlaybyplayItem(
+                    code = code,
+                    quarter = quarter,
+                    time = time,
+                    home_play = home_play,
+                    score = score,
+                    visit_play = visit_play
+                )
                 yield item
 
         
