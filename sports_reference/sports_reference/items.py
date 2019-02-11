@@ -19,3 +19,7 @@ class GameItem(scrapy.Item):
     start_time = scrapy.Field()
     home_team = scrapy.Field()
     visiting_team = scrapy.Field()
+
+class PlaybyplayItem(scrapy.Item):
+    code = scrapy.Field()
+    time = scrapy.Field()

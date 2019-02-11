@@ -5,11 +5,15 @@ import bs4
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from..items import GameItem
+from ..pipelines import GamesPipeline
+
 
 class GamesSpider(CrawlSpider):
     name = 'games'
+
+    pipeline = set([GamesPipeline])
     
-    years = range(2002, 2019)
+    years = range(2017, 2019)
     allowed_domains = ['basketball-reference.com']
     start_urls = ["https://www.basketball-reference.com/leagues/NBA_" + str(i) + "_games.html" for i in years]
     follow_urls = ['/leagues/NBA_' + str(i) + '_games' for i in years]
@@ -34,7 +38,7 @@ class GamesSpider(CrawlSpider):
             start_time = start_time,
             visiting_team = visiting_team,
             home_team = home_team
-            )
+        )
         return row
 
     def parse_item(self, response):
