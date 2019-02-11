@@ -9,7 +9,7 @@ from..items import GameItem
 class GamesSpider(CrawlSpider):
     name = 'games'
     
-    years = range(1990, 2019)
+    years = range(2002, 2019)
     allowed_domains = ['basketball-reference.com']
     start_urls = ["https://www.basketball-reference.com/leagues/NBA_" + str(i) + "_games.html" for i in years]
     follow_urls = ['/leagues/NBA_' + str(i) + '_games' for i in years]
