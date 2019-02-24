@@ -4,6 +4,9 @@ import bs4
 import csv
 from ..items import PlaybyplayItem
 from ..pipelines import PlaybyplayPipeline
+import os
+import re
+from datetime import datetime
 
 class PlaybyplaySpider(scrapy.Spider):
     name = 'playbyplay'
@@ -13,8 +16,19 @@ class PlaybyplaySpider(scrapy.Spider):
     allowed_domains = ['basketball-reference.com']
     start_urls = ['http://basketball-reference.com/']
 
+    def get_most_recent_scrape(self):
+        regex_pattern = '%Y-%m-%d_%H%M%S'
+        regex = re.compile(r'\.csv')
+        files = os.listdir("games")
+        csv_files = list(filter(regex.search, files))
+        dates = [datetime.strptime(f, "games_" + regex_pattern + ".csv") for f in csv_files]
+        return "games_" + max(dates).strftime("%Y-%m-%d_%H%M%S") + ".csv"
+
+
+
     def get_codes(self):
-        with open('games.csv', 'r', newline='') as f:
+        print("hello world")
+        with open("./games/" + self.get_most_recent_scrape(), 'r', newline='') as f:
             reader = csv.DictReader(f)
             out = [row['code'] for row in reader]
         return out
@@ -54,4 +68,13 @@ class PlaybyplaySpider(scrapy.Spider):
                 )
                 yield item
 
-        
+
+
+
+def get_most_recent_scrape():
+    regex_pattern = '%Y-%m-%d_%H%M%S'
+    regex = re.compile(r'\.csv')
+    files = os.listdir("games")
+    csv_files = list(filter(regex.search, files))
+    dates = [datetime.strptime(f, "games_" + regex_pattern + ".csv") for f in csv_files]
+    return "games_" + max(dates).strftime("%Y-%m-%d_%H%M%S") + ".csv"

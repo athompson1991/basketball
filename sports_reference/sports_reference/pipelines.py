@@ -5,7 +5,9 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import csv
+import datetime
 from .decorators import check_spider_pipeline
+from .decorators import check_spider_pipeline_file
 from scrapy.exceptions import DropItem
 
 
@@ -18,11 +20,26 @@ class GamesPipeline(object):
     def __init__(self):
         self.ids_seen = set()
 
+    @check_spider_pipeline_file
     def open_spider(self, spider):
-        self.file = open("games.csv", 'w')
+        now = datetime.datetime.now()
+        now_str = now.strftime("%Y-%m-%d_%H%M%S")
+        filename = "games_" + now_str + ".csv"
+        self.file = open("games/" + filename, 'w')
         self.writer = csv.DictWriter(
             self.file,
-            fieldnames=["code", "start_time", "home_team", "visiting_team"],
+            fieldnames=[
+                "code",
+                "start_time",
+                "home_team",
+                "home_code",
+                "home_points",
+                "visiting_team",
+                "visiting_code",
+                "visitor_points",
+                "has_ot",
+                "attendance"
+            ],
             lineterminator='\n'
         )
         self.writer.writeheader()
@@ -35,11 +52,13 @@ class GamesPipeline(object):
             self.ids_seen.add(item["code"])
             self.writer.writerow(dict(item))
 
+    @check_spider_pipeline_file
     def close_spider(self, spider):
         self.file.close()
 
 class PlaybyplayPipeline(object):
 
+    @check_spider_pipeline_file
     def open_spider(self, spider):
         self.file = open("play_by_play.csv", 'w')
         self.writer = csv.DictWriter(
@@ -53,5 +72,6 @@ class PlaybyplayPipeline(object):
     def process_item(self, item, spider):
         self.writer.writerow(dict(item))
 
+    @check_spider_pipeline_file
     def close_spider(self, spider):
         self.file.close()

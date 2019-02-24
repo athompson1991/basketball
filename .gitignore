@@ -109,3 +109,4 @@ venv.bak/
 .idea/
 .vs/
 basketball.pyproj
+*.csv
