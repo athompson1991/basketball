@@ -18,7 +18,13 @@ class GameItem(scrapy.Item):
     code = scrapy.Field()
     start_time = scrapy.Field()
     home_team = scrapy.Field()
+    home_code = scrapy.Field()
+    home_points = scrapy.Field()
     visiting_team = scrapy.Field()
+    visiting_code = scrapy.Field()
+    visitor_points = scrapy.Field()
+    has_ot = scrapy.Field()
+    attendance = scrapy.Field()
 
 class PlaybyplayItem(scrapy.Item):
     code = scrapy.Field()

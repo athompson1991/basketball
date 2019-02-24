@@ -14,7 +14,7 @@ class PlaybyplaySpider(scrapy.Spider):
     start_urls = ['http://basketball-reference.com/']
 
     def get_codes(self):
-        with open('../../games.csv', 'r', newline='') as f:
+        with open('games.csv', 'r', newline='') as f:
             reader = csv.DictReader(f)
             out = [row['code'] for row in reader]
         return out

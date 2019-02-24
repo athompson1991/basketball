@@ -27,17 +27,35 @@ class GamesSpider(CrawlSpider):
         data_names = [d.xpath("@data-stat").get() for d in row_data]
         soup = bs4.BeautifulSoup(row_data[0].extract())
         game_code = soup.find("th")["csk"]
+
         soup = bs4.BeautifulSoup(row_data[1].extract())
         start_time = soup.text
         soup = bs4.BeautifulSoup(row_data[2].extract())
         visiting_team = soup.text
+        visiting_code = soup.find(href=True).get("href").split("/")[2]
+        soup = bs4.BeautifulSoup(row_data[3].extract())
+        visitor_points = soup.text
         soup = bs4.BeautifulSoup(row_data[4].extract())
         home_team = soup.text
+        home_code = soup.find(href=True).get("href").split("/")[2]
+        soup = bs4.BeautifulSoup(row_data[5].extract())
+        home_points = soup.text
+        soup = bs4.BeautifulSoup(row_data[7].extract())
+        has_ot = soup.text == 'OT'
+        soup = bs4.BeautifulSoup(row_data[8].extract())
+        attendance = soup.text.replace(",", "")
+
         row = GameItem(
             code = game_code,
             start_time = start_time,
             visiting_team = visiting_team,
-            home_team = home_team
+            visiting_code = visiting_code,
+            visitor_points = visitor_points,
+            home_team = home_team,
+            home_code = home_code,
+            home_points = home_points,
+            has_ot = has_ot,
+            attendance = attendance
         )
         return row
 
