@@ -10,6 +10,7 @@ from .decorators import check_spider_pipeline
 from .decorators import check_spider_pipeline_file
 from scrapy.exceptions import DropItem
 
+time_format = "%Y-%m-%d_%H%M%S"
 
 class SportsReferencePipeline(object):
     def process_item(self, item, spider):
@@ -23,7 +24,7 @@ class GamesPipeline(object):
     @check_spider_pipeline_file
     def open_spider(self, spider):
         now = datetime.datetime.now()
-        now_str = now.strftime("%Y-%m-%d_%H%M%S")
+        now_str = now.strftime(time_format)
         filename = "games_" + now_str + ".csv"
         self.file = open("games/" + filename, 'w')
         self.writer = csv.DictWriter(
@@ -60,10 +61,19 @@ class PlaybyplayPipeline(object):
 
     @check_spider_pipeline_file
     def open_spider(self, spider):
-        self.file = open("play_by_play.csv", 'w')
+        now = datetime.datetime.now()
+        now_str = now.strftime(time_format)
+        self.file = open("pbp/pbp_" + now_str + ".csv", 'w')
         self.writer = csv.DictWriter(
             self.file,
-            fieldnames=["code", "quarter", "time", "home_play", "score", "visit_play"],
+            fieldnames = [
+                "code",
+                "quarter",
+                "time",
+                "home_play",
+                "score",
+                "visit_play"
+            ],
             lineterminator='\n'
         )
         self.writer.writeheader()
