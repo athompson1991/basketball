@@ -29,7 +29,6 @@ logging.basicConfig(
 games_spider = GamesSpider()
 pbp_spider = PlaybyplaySpider()
 
-pbp_spider.DEBUG=False
 
 runner.crawl(pbp_spider)
 runner.crawl(games_spider)
