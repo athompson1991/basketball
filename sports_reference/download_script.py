@@ -15,6 +15,10 @@ os.environ['SCRAPY_SETTINGS_MODULE'] = 'sports_reference.settings'
 settings_module_path = os.environ['SCRAPY_SETTINGS_MODULE']
 settings.setmodule(settings_module_path, priority='project')
 
+if 'games' not in os.listdir():
+    os.mkdir("games")
+if 'pbp' not in os.listdir():
+    os.mkdir('pbp')
 
 runner = CrawlerRunner()
 runner.settings = settings
