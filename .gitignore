@@ -110,3 +110,7 @@ venv.bak/
 .vs/
 basketball.pyproj
 *.csv
+games/
+pbp/
+Icon
+log.txt

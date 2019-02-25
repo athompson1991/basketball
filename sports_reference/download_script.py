@@ -29,10 +29,8 @@ logging.basicConfig(
 games_spider = GamesSpider()
 pbp_spider = PlaybyplaySpider()
 
-
 runner.crawl(pbp_spider)
 runner.crawl(games_spider)
 deferred = runner.join()
 deferred.addBoth(lambda _: reactor.stop())
 reactor.run()
-
