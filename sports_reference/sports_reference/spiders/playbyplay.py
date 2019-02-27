@@ -16,8 +16,7 @@ class PlaybyplaySpider(scrapy.Spider):
     allowed_domains = ['basketball-reference.com']
     start_urls = ['http://basketball-reference.com/']
 
-    def __init__(self, debug=True):
-        self.DEBUG = debug
+    DEBUG = True
 
     def get_most_recent_scrape(self):
         regex_pattern = '%Y-%m-%d_%H%M%S'
@@ -41,18 +40,22 @@ class PlaybyplaySpider(scrapy.Spider):
             with open("./games/" + most_recent_scrape, 'r', newline='') as f:
                 reader = csv.DictReader(f)
                 out = [row['code'] for row in reader]
-            if self.DEBUG:
-                out = out[:50]
         else:
             out = ["200803010ORL"]
         return out
 
     def start_requests(self):
-        codes = self.get_codes()
         url_stem = "https://www.basketball-reference.com/boxscores/pbp/"
-        urls = [url_stem + code + ".html" for code in codes]
+        print("########################################" + str(self.DEBUG))
+        codes = self.get_codes()
+        if self.DEBUG:
+            urls = [url_stem + "200803010ORL.html"]
+        else:
+            urls = [url_stem + code + ".html" for code in codes]
+
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
+
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]
