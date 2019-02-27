@@ -25,10 +25,12 @@ runner.settings = settings
 
 configure_logging(install_root_handler = False)
 logging.basicConfig(
-    filename='log.txt',
-        format='%(levelname)s: %(message)s',
-        level=logging.INFO
-)
+    level=logging.ERROR,
+    format="%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s",
+    handlers=[
+        logging.FileHandler("{0}/{1}.log".format(".", "log.txt")),
+        logging.StreamHandler()
+    ])
 
 games_spider = GamesSpider()
 pbp_spider = PlaybyplaySpider(debug=True) # Change to false for all the data - WARNING, WILL RUN FOREVER

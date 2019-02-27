@@ -70,9 +70,11 @@ class PlaybyplayPipeline(object):
                 "code",
                 "quarter",
                 "time",
-                "home_play",
+                "team",
+                "player_codes",
+                "player_names",
                 "score",
-                "visit_play"
+                "play"
             ],
             lineterminator='\n'
         )

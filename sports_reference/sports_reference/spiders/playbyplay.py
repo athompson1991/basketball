@@ -66,19 +66,42 @@ class PlaybyplaySpider(scrapy.Spider):
             td_ls = row.css('td')
             if len(td_ls) == 6:
                 time = td_ls[0].xpath("text()")[0].extract()
+
                 home_soup = bs4.BeautifulSoup(td_ls[1].extract())
                 home_play = home_soup.text
+
                 score = td_ls[3].xpath("text()")[0].extract()
                 visit_soup = bs4.BeautifulSoup(td_ls[5].extract())
                 visit_play = visit_soup.text
+
+                if home_play.strip() == "":
+                    team = "visitor"
+                    play = visit_play
+                    players = visit_soup.find_all("a")
+                    players_codes = [player.get("href").split("/")[3][:-5] for player in players]
+                    player_names = [player.text for player in players]
+
+                if home_play.strip() != "":
+                    team = "home"
+                    play = home_play
+                    players = home_soup.find_all("a")
+                    players_codes = [player.get("href").split("/")[3][:-5] for player in players]
+                    player_names = [player.text for player in players]
+
+                i = 1
+                for player in player_names:
+                    play = play.replace(player, "player_" + str(i))
+                    i = i + 1
 
                 item = PlaybyplayItem(
                     code = code,
                     quarter = quarter,
                     time = time,
-                    home_play = home_play,
-                    score = score,
-                    visit_play = visit_play
+                    team = team,
+                    play = play,
+                    player_codes = players_codes,
+                    player_names = player_names,
+                    score = score
                 )
                 yield item
 
