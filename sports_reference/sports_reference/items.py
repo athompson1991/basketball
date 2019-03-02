@@ -16,6 +16,7 @@ class SportsReferenceItem(scrapy.Item):
 
 class GameItem(scrapy.Item):
     code = scrapy.Field()
+    game_date = scrapy.Field()
     start_time = scrapy.Field()
     home_team = scrapy.Field()
     home_code = scrapy.Field()

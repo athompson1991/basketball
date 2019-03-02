@@ -33,8 +33,9 @@ logging.basicConfig(
     ])
 
 games_spider = GamesSpider()
-PlaybyplaySpider.DEBUG = True
+PlaybyplaySpider.DEBUG = True # Put false to run all games - USE AT YOUR OWN RISK
 pbp_spider = PlaybyplaySpider()
+
 
 runner.crawl(pbp_spider)
 runner.crawl(games_spider)

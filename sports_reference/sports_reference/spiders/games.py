@@ -2,10 +2,12 @@
 import scrapy
 import bs4
 
+from datetime import datetime
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from..items import GameItem
 from ..pipelines import GamesPipeline
+
 
 
 class GamesSpider(CrawlSpider):
@@ -13,7 +15,7 @@ class GamesSpider(CrawlSpider):
 
     pipeline = set([GamesPipeline])
     
-    years = range(2017, 2019)
+    years = range(2014, 2019)
     allowed_domains = ['basketball-reference.com']
     start_urls = ["https://www.basketball-reference.com/leagues/NBA_" + str(i) + "_games.html" for i in years]
     follow_urls = ['/leagues/NBA_' + str(i) + '_games' for i in years]
@@ -27,6 +29,9 @@ class GamesSpider(CrawlSpider):
         data_names = [d.xpath("@data-stat").get() for d in row_data]
         soup = bs4.BeautifulSoup(row_data[0].extract())
         game_code = soup.find("th")["csk"]
+        game_date = datetime.strptime(
+            soup.text, "%a, %b %d, %Y"
+        ).strftime("%Y-%m-%d")
 
         soup = bs4.BeautifulSoup(row_data[1].extract())
         start_time = soup.text
@@ -47,6 +52,7 @@ class GamesSpider(CrawlSpider):
 
         row = GameItem(
             code = game_code,
+            game_date = game_date,
             start_time = start_time,
             visiting_team = visiting_team,
             visiting_code = visiting_code,

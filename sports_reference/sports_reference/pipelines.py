@@ -31,6 +31,7 @@ class GamesPipeline(object):
             self.file,
             fieldnames=[
                 "code",
+                "game_date",
                 "start_time",
                 "home_team",
                 "home_code",
