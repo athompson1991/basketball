@@ -94,25 +94,43 @@ class BoxscorePipeline(object):
     def open_spider(self, spider):
         now = datetime.datetime.now()
         now_str = now.strftime(time_format)
-        filename = "games_" + now_str + ".csv"
-        self.file = open("games/" + filename, 'w')
+        filename = "boxscore_" + now_str + ".csv"
+        self.file = open("boxscore/" + filename, 'w')
         self.writer = csv.DictWriter(
             self.file,
             fieldnames=[
-                "code",
+                'code',
+                'team',
+                'player',
+                'mp',
+                'fg',
+                'fga',
+                'fg_pct',
+                'fg3',
+                'fg3a',
+                'fg3_pct',
+                'ft',
+                'fta',
+                'ft_pct',
+                'orb',
+                'drb',
+                'trb',
+                'ast',
+                'stl',
+                'blk',
+                'tov',
+                'pf',
+                'pts',
+                'plus_minus',
+                'reason'
             ],
             lineterminator='\n'
         )
         self.writer.writeheader()
 
-
     @check_spider_pipeline
     def process_item(self, item, spider):
-        if item["code"] in self.ids_seen:
-            raise DropItem("Duplicate item found: %s" % item)
-        else:
-            self.ids_seen.add(item["code"])
-            self.writer.writerow(dict(item))
+        self.writer.writerow(dict(item))
 
     @check_spider_pipeline_file
     def close_spider(self, spider):

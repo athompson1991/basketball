@@ -1,18 +1,4 @@
-# -*- coding: utf-8 -*-
-
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://doc.scrapy.org/en/latest/topics/items.html
-
 import scrapy
-
-
-class SportsReferenceItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
-
 
 class GameItem(scrapy.Item):
     code = scrapy.Field()
@@ -36,3 +22,29 @@ class PlaybyplayItem(scrapy.Item):
     player_names = scrapy.Field()
     score = scrapy.Field()
     play = scrapy.Field()
+
+class BoxscoreItem(scrapy.Item):
+    code = scrapy.Field(default="NA")
+    team = scrapy.Field(default="NA")
+    player = scrapy.Field(default="NA")
+    mp = scrapy.Field(default="NA")
+    fg = scrapy.Field(default="NA")
+    fga = scrapy.Field(default="NA")
+    fg_pct = scrapy.Field(default="NA")
+    fg3 = scrapy.Field(default="NA")
+    fg3a = scrapy.Field(default="NA")
+    fg3_pct = scrapy.Field(default="NA")
+    ft = scrapy.Field(default="NA")
+    fta = scrapy.Field(default="NA")
+    ft_pct = scrapy.Field(default="NA")
+    orb = scrapy.Field(default="NA")
+    drb = scrapy.Field(default="NA")
+    trb = scrapy.Field(default="NA")
+    ast = scrapy.Field(default="NA")
+    stl = scrapy.Field(default="NA")
+    blk = scrapy.Field(default="NA")
+    tov = scrapy.Field(default="NA")
+    pf = scrapy.Field(default="NA")
+    pts = scrapy.Field(default="NA")
+    plus_minus = scrapy.Field(default="NA")
+    reason = scrapy.Field(default="NA")

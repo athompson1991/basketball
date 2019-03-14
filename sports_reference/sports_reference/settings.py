@@ -66,7 +66,8 @@ ROBOTSTXT_OBEY = True
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'sports_reference.pipelines.GamesPipeline': 300,
-    'sports_reference.pipelines.PlaybyplayPipeline': 400
+    'sports_reference.pipelines.PlaybyplayPipeline': 400,
+    'sports_reference.pipelines.BoxscorePipeline': 400
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

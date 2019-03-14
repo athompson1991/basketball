@@ -17,7 +17,6 @@ class PlaybyplaySpider(scrapy.Spider):
 
     def start_requests(self):
         url_stem = "https://www.basketball-reference.com/boxscores/pbp/"
-        print("########################################" + str(self.DEBUG))
         codes = get_codes()
         if self.DEBUG:
             urls = [url_stem + "200803010ORL.html"]
