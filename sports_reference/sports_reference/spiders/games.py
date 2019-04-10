@@ -14,7 +14,7 @@ class GamesSpider(CrawlSpider):
     name = 'games'
 
     pipeline = set([GamesPipeline])
-    
+
     years = range(2017, 2019)
     allowed_domains = ['basketball-reference.com']
     start_urls = ["https://www.basketball-reference.com/leagues/NBA_" + str(i) + "_games.html" for i in years]

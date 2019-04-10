@@ -114,3 +114,5 @@ games/
 pbp/
 Icon
 log.txt
+Icon*
+*.swp
