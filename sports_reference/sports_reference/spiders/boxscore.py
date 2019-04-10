@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import bs4
 from ..pipelines import BoxscorePipeline
 from ..items import BoxscoreItem
 from ..utils import get_codes
-import bs4
 
 class BoxscoreSpider(scrapy.Spider):
     name = 'boxscore'
@@ -36,8 +36,8 @@ class BoxscoreSpider(scrapy.Spider):
                 stats["player"] = player
                 stats["team"] = team
                 item = BoxscoreItem(stats)
-                yield item
-
+                if player != "Reserves":
+                    yield item
 
     def start_requests(self):
         url_stem = "https://www.basketball-reference.com/boxscores/"

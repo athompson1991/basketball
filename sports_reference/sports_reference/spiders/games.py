@@ -51,17 +51,17 @@ class GamesSpider(CrawlSpider):
         attendance = soup.text.replace(",", "")
 
         row = GameItem(
-            code = game_code,
-            game_date = game_date,
-            start_time = start_time,
-            visiting_team = visiting_team,
-            visiting_code = visiting_code,
-            visitor_points = visitor_points,
-            home_team = home_team,
-            home_code = home_code,
-            home_points = home_points,
-            has_ot = has_ot,
-            attendance = attendance
+            code=game_code,
+            game_date=game_date,
+            start_time=start_time,
+            visiting_team=visiting_team,
+            visiting_code=visiting_code,
+            visitor_points=visitor_points,
+            home_team=home_team,
+            home_code=home_code,
+            home_points=home_points,
+            has_ot=has_ot,
+            attendance=attendance
         )
         return row
 
@@ -73,4 +73,4 @@ class GamesSpider(CrawlSpider):
         for row in schedule_rows[1:]:
             row_item = self.parse_row(row)
             yield row_item
-        
+

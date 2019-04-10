@@ -18,16 +18,30 @@ def check_directories():
     if 'boxscore' not in os.listdir():
         os.mkdir('boxscore')
 
-if __name__ == "__main__":
+def configure():
     settings = Settings()
     os.environ['SCRAPY_SETTINGS_MODULE'] = 'sports_reference.settings'
     settings_module_path = os.environ['SCRAPY_SETTINGS_MODULE']
     settings.setmodule(settings_module_path, priority='project')
+    return settings
 
+def create_spiders(debug=True):
+    PlaybyplaySpider.DEBUG = debug
+
+    games_spider = GamesSpider()
+    pbp_spider = PlaybyplaySpider()
+    boxscore_spider = BoxscoreSpider()
+    out = [games_spider, pbp_spider, boxscore_spider]
+    return out
+
+
+
+if __name__ == "__main__":
     check_directories()
+    SETTINGS = configure()
 
     runner = CrawlerRunner()
-    runner.settings = settings
+    runner.settings = SETTINGS
 
     configure_logging(install_root_handler = False)
     logging.basicConfig(
@@ -38,14 +52,10 @@ if __name__ == "__main__":
             logging.StreamHandler()
         ])
 
-    games_spider = GamesSpider()
-    PlaybyplaySpider.DEBUG = True # Put false to run all games - USE AT YOUR OWN RISK
-    pbp_spider = PlaybyplaySpider()
-    boxscore_spider = BoxscoreSpider()
+    spiders = create_spiders(True) # Put false to run all games - USE AT YOUR OWN RISK
 
-    runner.crawl(pbp_spider)
-    runner.crawl(games_spider)
-    runner.crawl(boxscore_spider)
+    for spider in spiders:
+        runner.crawl(spider)
 
     deferred = runner.join()
     deferred.addBoth(lambda _: reactor.stop())
