@@ -34,16 +34,17 @@ class LineMovementsSpider(scrapy.Spider):
             home_team = game['homeTeamName']
             away_team = game['awayTeamName']
             game_id = game['gamePrimaryId']
-            game_datetime = game['gameDateTime']
+            game_datetime = datetime.strptime(game['gameDateTime'].replace("T", " ")[:-5], "%Y-%m-%d %H:%M:%S")
             line_movements = game['lineMovements']
             for line in line_movements:
+                line_time = datetime.strptime(line['changeAt'].replace("T", " ")[:-5], "%Y-%m-%d %H:%M:%S")
                 yield {
                     'scrape_id': line['_id'],
                     'game_id': game_id,
-                    'game_datetime': game_datetime,
+                    'game_datetime': game_datetime.strftime("%Y-%m-%d %H:%M:%S"),
                     'home': home_team,
                     'away': away_team,
-                    'timestamp': line['changeAt'],
+                    'timestamp': line_time.strftime("%Y-%m-%d %H:%M:%S"),
                     'favorite': line['favorite'],
                     'favorite_money': line['favoriteMoney'],
                     'favorite_points': line['favoritePts'],

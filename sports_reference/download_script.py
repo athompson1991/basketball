@@ -1,5 +1,6 @@
 import os
 import logging
+import argparse
 
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
@@ -19,11 +20,11 @@ def check_directories():
         os.mkdir('boxscore')
 
 def configure():
-    settings = Settings()
+    temp_settings = Settings()
     os.environ['SCRAPY_SETTINGS_MODULE'] = 'sports_reference.settings'
     settings_module_path = os.environ['SCRAPY_SETTINGS_MODULE']
-    settings.setmodule(settings_module_path, priority='project')
-    return settings
+    temp_settings.setmodule(settings_module_path, priority='project')
+    return temp_settings
 
 def create_spiders(debug=True):
     PlaybyplaySpider.DEBUG = debug
@@ -34,14 +35,15 @@ def create_spiders(debug=True):
     out = [games_spider, pbp_spider, boxscore_spider]
     return out
 
-
-
 if __name__ == "__main__":
-    check_directories()
-    SETTINGS = configure()
+    parser = argparse.ArgumentParser(description="Scrape basketball-reference")
+    parser.add_argument("--run", help="Run the scrape", action="store_true")
+    args = parser.parse_args()
 
+    check_directories()
+    settings = configure()
     runner = CrawlerRunner()
-    runner.settings = SETTINGS
+    runner.settings = settings 
 
     configure_logging(install_root_handler = False)
     logging.basicConfig(
@@ -54,9 +56,10 @@ if __name__ == "__main__":
 
     spiders = create_spiders(True) # Put false to run all games - USE AT YOUR OWN RISK
 
-    for spider in spiders:
-        runner.crawl(spider)
+    if args.run:
+        for spider in spiders:
+            runner.crawl(spider)
 
-    deferred = runner.join()
-    deferred.addBoth(lambda _: reactor.stop())
-    reactor.run()
+        deferred = runner.join()
+        deferred.addBoth(lambda _: reactor.stop())
+        reactor.run()
