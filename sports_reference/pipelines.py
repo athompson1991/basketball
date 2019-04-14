@@ -18,6 +18,9 @@ class SportsReferencePipeline(object):
 
 
 class GamesPipeline(object):
+
+    DATA = "data"
+
     def __init__(self):
         self.ids_seen = set()
 
@@ -25,8 +28,9 @@ class GamesPipeline(object):
     def open_spider(self, spider):
         now = datetime.datetime.now()
         now_str = now.strftime(time_format)
-        filename = "games_" + now_str + ".csv"
-        self.file = open("games/" + filename, 'w')
+        target_dir = self.DATA + "/games/"
+        filename = target_dir + "games_" + now_str + ".csv"
+        self.file = open(filename, 'w')
         self.writer = csv.DictWriter(
             self.file,
             fieldnames=[
@@ -60,11 +64,15 @@ class GamesPipeline(object):
 
 class PlaybyplayPipeline(object):
 
+    DATA = "data"
+
     @check_spider_pipeline_file
     def open_spider(self, spider):
         now = datetime.datetime.now()
         now_str = now.strftime(time_format)
-        self.file = open("pbp/pbp_" + now_str + ".csv", 'w')
+        target_dir = self.DATA + "/pbp/"
+        filename = target_dir + "pbp_" + now_str + ".csv"
+        self.file = open(filename, 'w')
         self.writer = csv.DictWriter(
             self.file,
             fieldnames = [
@@ -90,12 +98,16 @@ class PlaybyplayPipeline(object):
         self.file.close()
 
 class BoxscorePipeline(object):
+
+    DATA = "data"
+
     @check_spider_pipeline_file
     def open_spider(self, spider):
         now = datetime.datetime.now()
         now_str = now.strftime(time_format)
-        filename = "boxscore_" + now_str + ".csv"
-        self.file = open("boxscore/" + filename, 'w')
+        target_dir = self.DATA +"/boxscore/"
+        filename = target_dir + "boxscore_" + now_str + ".csv"
+        self.file = open(filename, 'w')
         self.writer = csv.DictWriter(
             self.file,
             fieldnames=[

@@ -11,13 +11,13 @@ from sports_reference.spiders.games import GamesSpider
 from sports_reference.spiders.playbyplay import PlaybyplaySpider
 from sports_reference.spiders.boxscore import BoxscoreSpider
 
-def check_directories():
-    if 'games' not in os.listdir():
-        os.mkdir("games")
-    if 'pbp' not in os.listdir():
-        os.mkdir('pbp')
-    if 'boxscore' not in os.listdir():
-        os.mkdir('boxscore')
+def check_directories(target_dir="data"):
+    if 'games' not in os.listdir(target_dir):
+        os.mkdir(target_dir + "/games")
+    if 'pbp' not in os.listdir(target_dir):
+        os.mkdir(target_dir + '/pbp')
+    if 'boxscore' not in os.listdir(target_dir):
+        os.mkdir(target_dir + '/boxscore')
 
 def configure():
     temp_settings = Settings()
