@@ -6,24 +6,28 @@ from datetime import datetime
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from..items import GameItem
-from ..pipelines import GamesPipeline
+from ..constants import BASKETBALL_REFERENCE_URL
+from .base_spider import SRSpider
 
 
-
-class GamesSpider(CrawlSpider):
+class GamesSpider(SRSpider):
     name = 'games'
-
-    pipeline = set([GamesPipeline])
-
-    years = range(2017, 2019)
     allowed_domains = ['basketball-reference.com']
-    start_urls = ["https://www.basketball-reference.com/leagues/NBA_" + str(i) + "_games.html" for i in years]
-    follow_urls = ['/leagues/NBA_' + str(i) + '_games' for i in years]
 
-    rules = (
-        [Rule(LinkExtractor(allow=i), callback='parse_item', follow=False) for i in follow_urls]
-    )
- 
+    def __init__(self):
+        self.configure()
+        self.years = range(self.config['games']['years'][0], self.config['games']['years'][1])
+        self.urls = self.generate_urls()
+
+    def generate_urls(self):
+        months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+        out = []
+        for year in self.years:
+            for month in months:
+                url = BASKETBALL_REFERENCE_URL + "/leagues/NBA_" + str(year) + "_games-" + month + ".html"
+                out.append(url)
+        return out
+
     def parse_row(self, row):
         row_data = row.xpath('td|th')
         data_names = [d.xpath("@data-stat").get() for d in row_data]
@@ -73,4 +77,8 @@ class GamesSpider(CrawlSpider):
         for row in schedule_rows[1:]:
             row_item = self.parse_row(row)
             yield row_item
+
+    def start_requests(self):
+        for url in self.urls:
+            yield scrapy.Request(url=url, callback=self.parse_item)
 

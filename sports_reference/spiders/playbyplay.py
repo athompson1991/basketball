@@ -2,13 +2,9 @@
 import scrapy
 import bs4
 from ..items import PlaybyplayItem
-from ..pipelines import PlaybyplayPipeline
-from ..utils import get_codes
 
 class PlaybyplaySpider(scrapy.Spider):
-    name = 'playbyplay'
-
-    pipeline = set([PlaybyplayPipeline])
+    name = 'pbp'
 
     allowed_domains = ['basketball-reference.com']
     start_urls = ['http://basketball-reference.com/']
@@ -17,7 +13,7 @@ class PlaybyplaySpider(scrapy.Spider):
 
     def start_requests(self):
         url_stem = "https://www.basketball-reference.com/boxscores/pbp/"
-        codes = get_codes()
+        codes = ["200803010ORL"]
         if self.DEBUG:
             urls = [url_stem + "200803010ORL.html"]
         else:

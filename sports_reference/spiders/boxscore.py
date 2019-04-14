@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import bs4
-from ..pipelines import BoxscorePipeline
 from ..items import BoxscoreItem
-from ..utils import get_codes
+from .base_spider import SRSpider
+from ..constants import BASKETBALL_REFERENCE_URL
 
-class BoxscoreSpider(scrapy.Spider):
+class BoxscoreSpider(SRSpider):
     name = 'boxscore'
     allowed_domains = ['basketball-reference.com']
-    start_urls = ['http://basketball-reference.com/']
-
-    pipeline = set([BoxscorePipeline])
+    start_urls = [BASKETBALL_REFERENCE_URL]
 
     def __init__(self):
         self.teams = None
+        self.configure()
+        self.codes = self.config['boxscore']['codes']
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]
@@ -40,8 +40,7 @@ class BoxscoreSpider(scrapy.Spider):
                     yield item
 
     def start_requests(self):
-        url_stem = "https://www.basketball-reference.com/boxscores/"
-        codes = get_codes()
-        urls = [url_stem + code + ".html" for code in codes]
+        url_stem = BASKETBALL_REFERENCE_URL + "/boxscores/"
+        urls = [url_stem + code + ".html" for code in self.codes]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)

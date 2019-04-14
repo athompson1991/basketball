@@ -26,18 +26,21 @@ def configure():
     temp_settings.setmodule(settings_module_path, priority='project')
     return temp_settings
 
-def create_spiders(debug=True):
-    PlaybyplaySpider.DEBUG = debug
-
+def create_spiders():
     games_spider = GamesSpider()
     pbp_spider = PlaybyplaySpider()
     boxscore_spider = BoxscoreSpider()
-    out = [games_spider, pbp_spider, boxscore_spider]
+    out = {
+        'games': games_spider,
+        'pbp': pbp_spider,
+        'boxscore': boxscore_spider
+    }
     return out
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Scrape basketball-reference")
     parser.add_argument("--run", help="Run the scrape", action="store_true")
+    parser.add_argument("spiders", help="Get these", type=str, nargs="+", )
     args = parser.parse_args()
 
     check_directories()
@@ -45,7 +48,7 @@ if __name__ == "__main__":
     runner = CrawlerRunner()
     runner.settings = settings 
 
-    configure_logging(install_root_handler = False)
+    configure_logging(install_root_handler=False)
     logging.basicConfig(
         level=logging.ERROR,
         format="%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s",
@@ -54,11 +57,11 @@ if __name__ == "__main__":
             logging.StreamHandler()
         ])
 
-    spiders = create_spiders(True) # Put false to run all games - USE AT YOUR OWN RISK
+    spiders = create_spiders()
 
     if args.run:
-        for spider in spiders:
-            runner.crawl(spider)
+        for spider in args.spiders:
+            runner.crawl(spiders[spider])
 
         deferred = runner.join()
         deferred.addBoth(lambda _: reactor.stop())
