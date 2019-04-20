@@ -1,1 +1,1 @@
-BASKETBALL_REFERENCE_URL='http://basketball-reference.com/'
+BASKETBALL_REFERENCE_URL='https://www.basketball-reference.com/'

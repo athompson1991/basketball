@@ -66,6 +66,13 @@ class GamesSpider(SRSpider):
         soup = bs4.BeautifulSoup(row_data[8].extract())
         attendance = soup.text.replace(",", "")
 
+        if int(visitor_points) > int(home_points):
+            winner = visiting_code
+        elif int(home_points) > int(visitor_points):
+            winner = home_code
+        else:
+            winner = "NA"
+
         row = GameItem(
             code=game_code,
             game_date=game_date,
@@ -77,7 +84,8 @@ class GamesSpider(SRSpider):
             home_code=home_code,
             home_points=home_points,
             has_ot=has_ot,
-            attendance=attendance
+            attendance=attendance,
+            winner=winner
         )
         return row
 

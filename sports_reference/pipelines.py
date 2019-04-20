@@ -13,9 +13,10 @@ class CSVPipeline(object):
     def __init__(self):
         self.time_format = "%Y-%m-%d_%H%M%S"
         self.fieldnames= {
-            "games": ["code", "game_date", "start_time", "home_team", "home_code", "home_points", "visiting_team", "visiting_code", "visitor_points", "has_ot","attendance" ],
+            "games": ["code", "game_date", "start_time", "home_team", "home_code", "home_points", "visiting_team", "visiting_code", "visitor_points", "has_ot","attendance", "winner"],
             "pbp": ["code", "quarter", "time", "team", "player_codes", "player_names", "score", "play" ],
-            "boxscore": ['code', 'team', 'player', 'mp', 'fg', 'fga', 'fg_pct', 'fg3', 'fg3a', 'fg3_pct', 'ft', 'fta', 'ft_pct', 'orb', 'drb', 'trb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pts', 'plus_minus', 'reason' ]
+            "boxscore": ['code', 'team', 'player', 'mp', 'fg', 'fga', 'fg_pct', 'fg3', 'fg3a', 'fg3_pct', 'ft', 'fta', 'ft_pct', 'orb', 'drb', 'trb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pts', 'plus_minus', 'reason' ],
+            "shotchart": ['code', 'home_team', 'visiting_team']
         }
 
     def open_spider(self, spider):

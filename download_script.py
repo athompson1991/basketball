@@ -10,6 +10,7 @@ from scrapy.utils.log import configure_logging
 from sports_reference.spiders.games import GamesSpider
 from sports_reference.spiders.playbyplay import PlaybyplaySpider
 from sports_reference.spiders.boxscore import BoxscoreSpider
+from sports_reference.spiders.shot_chart import ShotChartSpider
 
 def check_directories(target_dir="data"):
     if 'games' not in os.listdir(target_dir):
@@ -18,6 +19,8 @@ def check_directories(target_dir="data"):
         os.mkdir(target_dir + '/pbp')
     if 'boxscore' not in os.listdir(target_dir):
         os.mkdir(target_dir + '/boxscore')
+    if 'shotchart' not in os.listdir(target_dir):
+        os.mkdir(target_dir + '/shotchart')
 
 def configure():
     temp_settings = Settings()
@@ -30,10 +33,12 @@ def create_spiders():
     games_spider = GamesSpider()
     pbp_spider = PlaybyplaySpider()
     boxscore_spider = BoxscoreSpider()
+    shotchart_spider = ShotChartSpider()
     out = {
         'games': games_spider,
         'pbp': pbp_spider,
-        'boxscore': boxscore_spider
+        'boxscore': boxscore_spider,
+        'shotchart': shotchart_spider
     }
     return out
 

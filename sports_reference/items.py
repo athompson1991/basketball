@@ -12,6 +12,7 @@ class GameItem(scrapy.Item):
     visitor_points = scrapy.Field()
     has_ot = scrapy.Field()
     attendance = scrapy.Field()
+    winner = scrapy.Field()
 
 class PlaybyplayItem(scrapy.Item):
     code = scrapy.Field()
@@ -48,3 +49,8 @@ class BoxscoreItem(scrapy.Item):
     pts = scrapy.Field(default="NA")
     plus_minus = scrapy.Field(default="NA")
     reason = scrapy.Field(default="NA")
+
+class ShotChartItem(scrapy.Item):
+    code = scrapy.Field(default="NA")
+    home_team = scrapy.Field(default="NA")
+    visiting_team = scrapy.Field(default="NA")
