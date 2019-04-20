@@ -7,8 +7,6 @@ from ..constants import BASKETBALL_REFERENCE_URL
 
 class BoxscoreSpider(SRSpider):
     name = 'boxscore'
-    allowed_domains = ['basketball-reference.com']
-    start_urls = [BASKETBALL_REFERENCE_URL]
 
     def __init__(self):
         self.teams = None

@@ -12,7 +12,6 @@ from .base_spider import SRSpider
 
 class GamesSpider(SRSpider):
     name = 'games'
-    allowed_domains = ['basketball-reference.com']
 
     def __init__(self):
         self.configure()
@@ -20,7 +19,20 @@ class GamesSpider(SRSpider):
         self.urls = self.generate_urls()
 
     def generate_urls(self):
-        months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+        months = [
+            'january',
+            'february',
+            'march',
+            'april',
+            'may',
+            'june',
+            'july',
+            'august',
+            'september',
+            'october',
+            'november',
+            'december'
+        ]
         out = []
         for year in self.years:
             for month in months:
@@ -30,7 +42,6 @@ class GamesSpider(SRSpider):
 
     def parse_row(self, row):
         row_data = row.xpath('td|th')
-        data_names = [d.xpath("@data-stat").get() for d in row_data]
         soup = bs4.BeautifulSoup(row_data[0].extract())
         game_code = soup.find("th")["csk"]
         game_date = datetime.strptime(
@@ -38,7 +49,8 @@ class GamesSpider(SRSpider):
         ).strftime("%Y-%m-%d")
 
         soup = bs4.BeautifulSoup(row_data[1].extract())
-        start_time = soup.text
+        start_time = soup.text + 'm'
+        start_time = datetime.strptime(start_time, "%I:%M%p").strftime("%H:%M")
         soup = bs4.BeautifulSoup(row_data[2].extract())
         visiting_team = soup.text
         visiting_code = soup.find(href=True).get("href").split("/")[2]

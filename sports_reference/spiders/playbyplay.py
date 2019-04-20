@@ -1,24 +1,31 @@
 # -*- coding: utf-8 -*-
+"""Play by Play data
+This module contains the spider that gets the play-by-play schedule for a full game
+from the basketball-referenec website.
+"""
 import scrapy
 import bs4
 from ..items import PlaybyplayItem
+from .base_spider import SRSpider
+from ..constants import BASKETBALL_REFERENCE_URL
 
-class PlaybyplaySpider(scrapy.Spider):
+class PlaybyplaySpider(SRSpider):
+    """PlaybyplaySpider does the parsing of the response
+
+    """
     name = 'pbp'
+    start_urls = [BASKETBALL_REFERENCE_URL]
 
-    allowed_domains = ['basketball-reference.com']
-    start_urls = ['http://basketball-reference.com/']
-
-    DEBUG = True
+    def __init__(self):
+        """Initialization includes reading the config file
+        """
+        super().__init__()
+        self.configure()
+        self.codes = self.config['pbp']['codes']
 
     def start_requests(self):
-        url_stem = "https://www.basketball-reference.com/boxscores/pbp/"
-        codes = ["200803010ORL"]
-        if self.DEBUG:
-            urls = [url_stem + "200803010ORL.html"]
-        else:
-            urls = [url_stem + code + ".html" for code in codes]
-
+        url_stem = BASKETBALL_REFERENCE_URL + "/boxscores/pbp/"
+        urls = [url_stem + code + ".html" for code in self.codes]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -57,13 +64,13 @@ class PlaybyplaySpider(scrapy.Spider):
                 non_null = [td for td in left_and_right if td is not None][0]
 
                 item = PlaybyplayItem(
-                    code = code,
-                    quarter = quarter,
-                    time = time,
-                    team = non_null["team"],
-                    play = non_null["play"],
-                    player_codes = non_null["players_codes"],
-                    player_names = non_null["player_names"],
-                    score = score
+                    code=code,
+                    quarter=quarter,
+                    time=time,
+                    team=non_null["team"],
+                    play=non_null["play"],
+                    player_codes=non_null["players_codes"],
+                    player_names=non_null["player_names"],
+                    score=score
                 )
                 yield item
