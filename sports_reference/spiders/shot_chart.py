@@ -74,7 +74,6 @@ class ShotChartSpider(SRSpider):
             )
             yield row
 
-
     def parse_div(self, div):
         shot_location = div.attrs['style']
         split_shot_location = re.findall(r'\d+', shot_location)
