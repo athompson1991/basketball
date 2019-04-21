@@ -52,5 +52,14 @@ class BoxscoreItem(scrapy.Item):
 
 class ShotChartItem(scrapy.Item):
     code = scrapy.Field(default="NA")
-    home_team = scrapy.Field(default="NA")
-    visiting_team = scrapy.Field(default="NA")
+    team = scrapy.Field(default="NA")
+    team_type = scrapy.Field(default="NA")
+    shot_location = scrapy.Field(default="NA")
+    x = scrapy.Field(default="NA")
+    y = scrapy.Field(default="NA")
+    made_shot = scrapy.Field(default="NA")
+    tip = scrapy.Field(default="NA")
+    player_code = scrapy.Field(default="NA")
+    quarter = scrapy.Field(default="NA")
+    time_left = scrapy.Field(default="NA")
+
