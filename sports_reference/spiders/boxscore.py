@@ -27,14 +27,17 @@ class BoxscoreSpider(SRSpider):
             body_rows = basic_table_body[0].css("tr")
             for row in body_rows:
                 soup = bs4.BeautifulSoup(row.extract())
-                tds = soup.find_all("td")
-                stats = {td["data-stat"]: td.text for td in tds}
                 player = soup.find("th").text
-                stats["code"] = code
-                stats["player"] = player
-                stats["team"] = team
-                item = BoxscoreItem(stats)
                 if player != "Reserves":
+                    th = soup.find_all('th')
+                    player_code = th[0].attrs['data-append-csv']
+                    tds = soup.find_all("td")
+                    stats = {td["data-stat"]: td.text for td in tds}
+                    stats["code"] = code
+                    stats["player"] = player
+                    stats["team"] = team
+                    stats['player_code'] = player_code
+                    item = BoxscoreItem(stats)
                     yield item
 
     def start_requests(self):

@@ -27,6 +27,7 @@ class PlaybyplayItem(scrapy.Item):
 class BoxscoreItem(scrapy.Item):
     code = scrapy.Field(default="NA")
     team = scrapy.Field(default="NA")
+    player_code = scrapy.Field(default="NA")
     player = scrapy.Field(default="NA")
     mp = scrapy.Field(default="NA")
     fg = scrapy.Field(default="NA")
