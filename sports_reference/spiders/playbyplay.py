@@ -14,7 +14,6 @@ class PlaybyplaySpider(SRSpider):
 
     """
     name = 'pbp'
-    start_urls = [BASKETBALL_REFERENCE_URL]
 
     def __init__(self):
         """Initialization includes reading the config file
@@ -28,37 +27,62 @@ class PlaybyplaySpider(SRSpider):
         urls = [url_stem + code + ".html" for code in self.codes]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
+ 
+    def get_player_codes(self, soup):
+        players = soup.find_all("a")
+        players_codes = [player.get("href").split("/")[3][:-5] for player in players]
+        player_names = [player.text for player in players]
+        n = len(players_codes)
+        if n == 1:
+            player_1 = players_codes[0]
+            player_2 = ''
+            player_1_name = player_names[0]
+            player_2_name = ''
+        elif n == 2:
+            player_1 = players_codes[0]
+            player_2 = players_codes[1]
+            player_1_name = player_names[0]
+            player_2_name = player_names[1]
+        elif n == 0:
+            player_1 = ''
+            player_2 = ''
+            player_1_name = ''
+            player_2_name = ''
+        return (player_1, player_2, player_1_name, player_2_name)
 
-    def parse_left_or_right(self, td, type):
+    def parse_left_or_right(self, td, team_type):
         out = {}
         soup = bs4.BeautifulSoup(td.extract())
         out["play"] = soup.text
         if out["play"].strip() != "":
-            out["team"] = type
-            out["players"] = soup.find_all("a")
-            out["players_codes"] = [player.get("href").split("/")[3][:-5] for player in out["players"]]
-            out["player_names"] = [player.text for player in out["players"]]
+            out["team"] = team_type
+            out["player_1"], out["player_2"], out["player_1_name"], out["player_2_name"] = self.get_player_codes(soup)
         else:
             out = None
         return out
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]
+        home_team, visiting_team = self.get_team_codes(response)
+
         pbp_table = response.css("table#pbp")
         rows = pbp_table.xpath("//tr")
         quarter = None
         for row in rows:
-            ids =  row.xpath("@id").extract()
+            ids = row.xpath("@id").extract()
             if len(ids) > 0:
                 quarter = ids[0]
             td_ls = row.css('td')
             if len(td_ls) == 6:
                 time = td_ls[0].xpath("text()")[0].extract()
                 score = td_ls[3].xpath("text()")[0].extract()
+                score_split = score.split('-')
+                home_score = score_split[0]
+                away_score = score_split[1]
 
                 left_and_right = [
-                    self.parse_left_or_right(td_ls[1], "home"),
-                    self.parse_left_or_right(td_ls[5], "visitor")
+                    self.parse_left_or_right(td_ls[1], home_team),
+                    self.parse_left_or_right(td_ls[5], visiting_team)
                 ]
 
                 non_null = [td for td in left_and_right if td is not None][0]
@@ -69,8 +93,13 @@ class PlaybyplaySpider(SRSpider):
                     time=time,
                     team=non_null["team"],
                     play=non_null["play"],
-                    player_codes=non_null["players_codes"],
-                    player_names=non_null["player_names"],
-                    score=score
+                    player_1=non_null['player_1'],
+                    player_2=non_null['player_2'],
+        #            player_names=non_null["player_names"],
+                    player_1_name=non_null['player_1_name'],
+                    player_2_name=non_null['player_2_name'],
+                    score=score,
+                    home_score=home_score,
+                    away_score=away_score
                 )
                 yield item

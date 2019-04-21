@@ -22,14 +22,8 @@ class ShotChartSpider(SRSpider):
     def parse(self, response):
         url_ls = response.url.split('/')
         code = url_ls[len(url_ls) - 1][:-5]
-        scorebox = response.css('div.scorebox')
-        soup = bs4.BeautifulSoup(scorebox[0].extract())
-        teams = soup.find_all('strong')
-        home_href = teams[1].find_all('a', href=True)[0]['href']
-        visit_href = teams[0].find_all('a', href=True)[0]['href']
 
-        home_team = home_href.split("/")[2]
-        visiting_team = visit_href.split("/")[2]
+        home_team, visiting_team = self.get_team_codes(response)
 
         home_wrapper = response.css('div#wrapper-' + home_team).css('div#shots-' + home_team)
         visitor_wrapper = response.css('div#wrapper-' + visiting_team).css('div#shots-' + visiting_team)

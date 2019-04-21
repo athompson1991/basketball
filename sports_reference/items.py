@@ -19,9 +19,15 @@ class PlaybyplayItem(scrapy.Item):
     quarter = scrapy.Field()
     time = scrapy.Field()
     team = scrapy.Field()
-    player_codes = scrapy.Field()
-    player_names = scrapy.Field()
+#    player_codes = scrapy.Field()
+    player_1 = scrapy.Field()
+    player_2 = scrapy.Field()
+#    player_names = scrapy.Field()
+    player_1_name = scrapy.Field()
+    player_2_name = scrapy.Field()
     score = scrapy.Field()
+    home_score = scrapy.Field()
+    away_score = scrapy.Field()
     play = scrapy.Field()
 
 class BoxscoreItem(scrapy.Item):
