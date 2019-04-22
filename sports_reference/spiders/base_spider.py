@@ -9,6 +9,7 @@ class SRSpider(scrapy.Spider):
 
     start_url = BASKETBALL_REFERENCE_URL
     allowed_domains = ['basketball-reference.com']
+    debug = True
 
     def __init__(self):
         self.config = None

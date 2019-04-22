@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Play by Play data
 This module contains the spider that gets the play-by-play schedule for a full game
-from the basketball-referenec website.
+from the basketball-reference website.
 """
 import scrapy
 import bs4
@@ -20,7 +20,10 @@ class PlaybyplaySpider(SRSpider):
         """
         super().__init__()
         self.configure()
-        self.codes = self.config['pbp']['codes']
+        if self.debug:
+            self.codes = self.config['pbp']['debug_codes']
+        else:
+            self.codes = self.config['pbp']['codes']
 
     def start_requests(self):
         url_stem = BASKETBALL_REFERENCE_URL + "/boxscores/pbp/"

@@ -11,7 +11,10 @@ class BoxscoreSpider(SRSpider):
     def __init__(self):
         self.teams = None
         self.configure()
-        self.codes = self.config['boxscore']['codes']
+        if self.debug:
+            self.codes = self.config['boxscore']['debug_codes']
+        else:
+            self.codes = self.config['boxscore']['codes']
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]

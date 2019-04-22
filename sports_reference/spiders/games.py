@@ -15,7 +15,11 @@ class GamesSpider(SRSpider):
 
     def __init__(self):
         self.configure()
-        self.years = range(self.config['games']['years'][0], self.config['games']['years'][1])
+        if self.debug:
+            years = self.config['games']['debug_years']
+        else:
+            years = self.config['games']['years']
+        self.years = range(years[0], years[1])
         self.urls = self.generate_urls()
 
     def generate_urls(self):

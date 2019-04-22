@@ -29,23 +29,28 @@ def configure():
     temp_settings.setmodule(settings_module_path, priority='project')
     return temp_settings
 
-def create_spiders():
-    games_spider = GamesSpider()
-    pbp_spider = PlaybyplaySpider()
-    boxscore_spider = BoxscoreSpider()
-    shotchart_spider = ShotChartSpider()
+def create_spiders(debug_mode):
+    print("Creating spiders...")
+    games_spider = GamesSpider
+    pbp_spider = PlaybyplaySpider
+    boxscore_spider = BoxscoreSpider
+    shotchart_spider = ShotChartSpider
+    print("Spiders created")
     out = {
         'games': games_spider,
         'pbp': pbp_spider,
         'boxscore': boxscore_spider,
         'shotchart': shotchart_spider
     }
+    for k in out.keys():
+        out[k].debug = debug_mode
     return out
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Scrape basketball-reference")
-    parser.add_argument("--run", help="Run the scrape", action="store_true")
     parser.add_argument("spiders", help="Get these", type=str, nargs="+", )
+    parser.add_argument("--run", help="Run the scrape", action="store_true")
+    parser.add_argument("--live", help="Turns off debug mode, pulls all the data", action="store_true")
     args = parser.parse_args()
 
     check_directories()
@@ -62,10 +67,17 @@ if __name__ == "__main__":
             logging.StreamHandler()
         ])
 
-    spiders = create_spiders()
+    if args.live:
+        print("Running in live mode")
+        spiders = create_spiders(debug_mode=False)
+    else:
+        print("Running in debug mode")
+        spiders = create_spiders(debug_mode=True)
 
+    print("Going to run spiders")
     if args.run:
         for spider in args.spiders:
+            print("Running spider " + spider)
             runner.crawl(spiders[spider])
 
         deferred = runner.join()

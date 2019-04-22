@@ -11,7 +11,10 @@ class ShotChartSpider(SRSpider):
     def __init__(self):
         super().__init__()
         self.configure()
-        self.codes = self.config['shotchart']['codes']
+        if self.debug:
+            self.codes = self.config['shotchart']['debug_codes']
+        else:
+            self.codes = self.config['shotchart']['codes']
 
     def start_requests(self):
         url_stem = BASKETBALL_REFERENCE_URL + "boxscores/shot-chart/"
