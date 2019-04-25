@@ -11,20 +11,17 @@ from sports_reference.spiders.games import GamesSpider
 from sports_reference.spiders.playbyplay import PlaybyplaySpider
 from sports_reference.spiders.boxscore import BoxscoreSpider
 from sports_reference.spiders.shot_chart import ShotChartSpider
+from scores_and_odds.spiders.line_movements import LineMovementsSpider
 
 def check_directories(target_dir="data"):
-    if 'games' not in os.listdir(target_dir):
-        os.mkdir(target_dir + "/games")
-    if 'pbp' not in os.listdir(target_dir):
-        os.mkdir(target_dir + '/pbp')
-    if 'boxscore' not in os.listdir(target_dir):
-        os.mkdir(target_dir + '/boxscore')
-    if 'shotchart' not in os.listdir(target_dir):
-        os.mkdir(target_dir + '/shotchart')
+    dir_names = ['games', 'pbp', 'boxscore', 'shotchart', 'linemoves']
+    for name in dir_names:
+        if name not in os.listdir(target_dir):
+            os.mkdir(target_dir + "/" + dir_names)
 
-def configure():
+def configure(target_module):
     temp_settings = Settings()
-    os.environ['SCRAPY_SETTINGS_MODULE'] = 'sports_reference.settings'
+    os.environ['SCRAPY_SETTINGS_MODULE'] = target_module
     settings_module_path = os.environ['SCRAPY_SETTINGS_MODULE']
     temp_settings.setmodule(settings_module_path, priority='project')
     return temp_settings
@@ -35,12 +32,14 @@ def create_spiders(debug_mode):
     pbp_spider = PlaybyplaySpider
     boxscore_spider = BoxscoreSpider
     shotchart_spider = ShotChartSpider
+    linemove_spider = LineMovementsSpider
     print("Spiders created")
     out = {
         'games': games_spider,
         'pbp': pbp_spider,
         'boxscore': boxscore_spider,
-        'shotchart': shotchart_spider
+        'shotchart': shotchart_spider,
+        'linemoves': linemove_spider
     }
     for k in out.keys():
         out[k].debug = debug_mode
@@ -54,7 +53,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     check_directories()
-    settings = configure()
+    settings = configure('sports_reference.settings')
     runner = CrawlerRunner()
     runner.settings = settings 
 
