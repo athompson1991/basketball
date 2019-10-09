@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import bs4
-from ..items import BoxscoreItem
+from core.items import BoxscoreItem
 from .base_spider import SRSpider
-from ..constants import BASKETBALL_REFERENCE_URL
+from core.constants import BASKETBALL_REFERENCE_URL
 
 class BoxscoreSpider(SRSpider):
     name = 'boxscore'

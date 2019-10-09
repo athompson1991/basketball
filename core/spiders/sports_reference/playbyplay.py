@@ -5,9 +5,9 @@ from the basketball-reference website.
 """
 import scrapy
 import bs4
-from ..items import PlaybyplayItem
+from core.items import PlaybyplayItem
 from .base_spider import SRSpider
-from ..constants import BASKETBALL_REFERENCE_URL
+from core.constants import BASKETBALL_REFERENCE_URL
 
 class PlaybyplaySpider(SRSpider):
     """PlaybyplaySpider does the parsing of the response

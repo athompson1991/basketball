@@ -1,8 +1,8 @@
 import scrapy
 import re
 from .base_spider import SRSpider
-from ..constants import BASKETBALL_REFERENCE_URL
-from ..items import ShotChartItem
+from core.constants import BASKETBALL_REFERENCE_URL
+from core.items import ShotChartItem
 import bs4
 
 class ShotChartSpider(SRSpider):

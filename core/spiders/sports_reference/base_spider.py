@@ -3,7 +3,7 @@ import json
 import bs4
 
 # -*- coding: utf-8 -*-
-from ..constants import BASKETBALL_REFERENCE_URL
+from core.constants import BASKETBALL_REFERENCE_URL
 
 class SRSpider(scrapy.Spider):
 

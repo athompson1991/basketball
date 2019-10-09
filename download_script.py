@@ -2,16 +2,17 @@ import os
 import logging
 import argparse
 
+
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
 from scrapy.settings import Settings
 from scrapy.utils.log import configure_logging
 
-from sports_reference.spiders.games import GamesSpider
-from sports_reference.spiders.playbyplay import PlaybyplaySpider
-from sports_reference.spiders.boxscore import BoxscoreSpider
-from sports_reference.spiders.shot_chart import ShotChartSpider
-from scores_and_odds.spiders.line_movements import LineMovementsSpider
+from core.spiders.sports_reference.games import GamesSpider
+from core.spiders.sports_reference.playbyplay import PlaybyplaySpider
+from core.spiders.sports_reference.boxscore import BoxscoreSpider
+from core.spiders.sports_reference.shot_chart import ShotChartSpider
+from core.spiders.scores_and_odds.line_movements import LineMovementsSpider
 
 def check_directories(target_dir="data"):
     dir_names = ['games', 'pbp', 'boxscore', 'shotchart', 'linemoves']

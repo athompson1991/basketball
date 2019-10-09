@@ -3,10 +3,8 @@ import scrapy
 import bs4
 
 from datetime import datetime
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
-from..items import GameItem
-from ..constants import BASKETBALL_REFERENCE_URL
+from core.items import GameItem
+from core.constants import BASKETBALL_REFERENCE_URL
 from .base_spider import SRSpider
 
 
