@@ -1,5 +1,7 @@
 import scrapy
 import re
+
+from config import codes
 from .base_spider import SRSpider
 from core.constants import BASKETBALL_REFERENCE_URL
 from core.items import ShotChartItem
@@ -10,8 +12,7 @@ class ShotChartSpider(SRSpider):
 
     def __init__(self):
         super().__init__()
-        self.configure()
-        self.codes = self.config['shotchart']['codes']
+        self.codes = codes
 
     def start_requests(self):
         url_stem = BASKETBALL_REFERENCE_URL + "boxscores/shot-chart/"

@@ -13,7 +13,7 @@ class GamesSpider(SRSpider):
     name = 'games'
 
     def __init__(self):
-        self.years = [2018, 2019]
+        self.years = list(range(2000, 2020))
         self.urls = self.generate_urls()
 
     def generate_urls(self):

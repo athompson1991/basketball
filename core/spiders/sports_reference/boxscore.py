@@ -12,7 +12,7 @@ class BoxscoreSpider(SRSpider):
 
     def __init__(self):
         self.teams = None
-        self.codes = codes
+        self.codes = ['201901010MIL']
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]

@@ -5,6 +5,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Scatch files
+scratch.py
+core/password
+
 # C extensions
 *.so
 

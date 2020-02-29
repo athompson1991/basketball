@@ -8,6 +8,7 @@ import bs4
 
 from config import codes
 from core.items import PlaybyplayItem
+from core.utils import get_codes
 from .base_spider import SRSpider
 from core.constants import BASKETBALL_REFERENCE_URL
 
@@ -17,7 +18,7 @@ class PlaybyplaySpider(SRSpider):
 
     def __init__(self):
         super().__init__()
-        self.codes = codes
+        self.codes = get_codes()
 
     def start_requests(self):
         url_stem = BASKETBALL_REFERENCE_URL + "/boxscores/pbp/"
