@@ -2,9 +2,10 @@
 import scrapy
 import bs4
 
+
 from datetime import datetime
 from core.items import GameItem
-from core.constants import BASKETBALL_REFERENCE_URL
+from core.constants import BASKETBALL_REFERENCE_URL, months
 from .base_spider import SRSpider
 
 
@@ -12,29 +13,10 @@ class GamesSpider(SRSpider):
     name = 'games'
 
     def __init__(self):
-        self.configure()
-        if self.debug:
-            years = self.config['games']['debug_years']
-        else:
-            years = self.config['games']['years']
-        self.years = range(years[0], years[1])
+        self.years = [2018, 2019]
         self.urls = self.generate_urls()
 
     def generate_urls(self):
-        months = [
-            'january',
-            'february',
-            'march',
-            'april',
-            'may',
-            'june',
-            'july',
-            'august',
-            'september',
-            'october',
-            'november',
-            'december'
-        ]
         out = []
         for year in self.years:
             for month in months:

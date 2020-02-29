@@ -5,25 +5,19 @@ from the basketball-reference website.
 """
 import scrapy
 import bs4
+
+from config import codes
 from core.items import PlaybyplayItem
 from .base_spider import SRSpider
 from core.constants import BASKETBALL_REFERENCE_URL
 
 class PlaybyplaySpider(SRSpider):
-    """PlaybyplaySpider does the parsing of the response
 
-    """
     name = 'pbp'
 
     def __init__(self):
-        """Initialization includes reading the config file
-        """
         super().__init__()
-        self.configure()
-        if self.debug:
-            self.codes = self.config['pbp']['debug_codes']
-        else:
-            self.codes = self.config['pbp']['codes']
+        self.codes = codes
 
     def start_requests(self):
         url_stem = BASKETBALL_REFERENCE_URL + "/boxscores/pbp/"

@@ -9,5 +9,3 @@ os:
   - linux
   - osx
   - windows
-script:
-  - python sports_reference/download_script.py

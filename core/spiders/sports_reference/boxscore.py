@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import bs4
+
+from config import codes
 from core.items import BoxscoreItem
 from .base_spider import SRSpider
 from core.constants import BASKETBALL_REFERENCE_URL
@@ -10,11 +12,7 @@ class BoxscoreSpider(SRSpider):
 
     def __init__(self):
         self.teams = None
-        self.configure()
-        if self.debug:
-            self.codes = self.config['boxscore']['debug_codes']
-        else:
-            self.codes = self.config['boxscore']['codes']
+        self.codes = codes
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]
