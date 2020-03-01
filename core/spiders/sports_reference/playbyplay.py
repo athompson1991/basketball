@@ -3,17 +3,18 @@
 This module contains the spider that gets the play-by-play schedule for a full game
 from the basketball-reference website.
 """
-import scrapy
-import bs4
+import datetime
 
-from config import codes
+import bs4
+import scrapy
+
+from core.constants import BASKETBALL_REFERENCE_URL
 from core.items import PlaybyplayItem
 from core.utils import get_codes
 from .base_spider import SRSpider
-from core.constants import BASKETBALL_REFERENCE_URL
+
 
 class PlaybyplaySpider(SRSpider):
-
     name = 'pbp'
 
     def __init__(self):
@@ -25,7 +26,7 @@ class PlaybyplaySpider(SRSpider):
         urls = [url_stem + code + ".html" for code in self.codes]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
- 
+
     def get_player_codes(self, soup):
         players = soup.find_all("a")
         players_codes = [player.get("href").split("/")[3][:-5] for player in players]
@@ -85,19 +86,28 @@ class PlaybyplaySpider(SRSpider):
 
                 non_null = [td for td in left_and_right if td is not None][0]
 
+                time = datetime.datetime.strptime(time, '%M:%S.0').time()
+                quarter = quarter.replace('q', '')
+                q_int = int(quarter)
+
+                previous_quarter_seconds = (q_int - 1) * 12 * 60
+                current_quarter_seconds = 720 - time.minute * 60 - time.second
+                seconds_into_game = previous_quarter_seconds + current_quarter_seconds
+
                 item = PlaybyplayItem(
                     code=code,
                     quarter=quarter,
                     time=time,
+                    seconds_into_game=seconds_into_game,
                     team=non_null["team"],
                     play=non_null["play"],
                     player_1=non_null['player_1'],
                     player_2=non_null['player_2'],
-        #            player_names=non_null["player_names"],
                     player_1_name=non_null['player_1_name'],
                     player_2_name=non_null['player_2_name'],
                     score=score,
-                    home_score=home_score,
-                    away_score=away_score
+                    home_score=int(home_score),
+                    away_score=int(away_score),
+                    score_diff=int(home_score) - int(away_score)
                 )
                 yield item

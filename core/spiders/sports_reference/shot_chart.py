@@ -1,11 +1,13 @@
-import scrapy
 import re
 
+import bs4
+import scrapy
+
 from config import codes
-from .base_spider import SRSpider
 from core.constants import BASKETBALL_REFERENCE_URL
 from core.items import ShotChartItem
-import bs4
+from .base_spider import SRSpider
+
 
 class ShotChartSpider(SRSpider):
     name = 'shotchart'
@@ -102,4 +104,3 @@ class ShotChartSpider(SRSpider):
         }
 
         return out
-

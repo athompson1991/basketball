@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import re
-from datetime import  datetime, timedelta
 import json
+from datetime import datetime, timedelta
+
 import scrapy
-import bs4
+
 
 def make_urls(start, end):
     url_stem = 'https://api.scoresandodds.com/api/scores/scoresandoddsdotcom/home2'
@@ -11,7 +11,7 @@ def make_urls(start, end):
     datetime_end = datetime.strptime(end, '%Y-%m-%d')
     delta = datetime_end - datetime_start
     dates = [datetime_start + timedelta(i) for i in range(delta.days)]
-    urls = [url_stem + "?gameDate=" + date.strftime("%Y-%m-%d")for date in dates]
+    urls = [url_stem + "?gameDate=" + date.strftime("%Y-%m-%d") for date in dates]
     return urls
 
 
@@ -33,6 +33,3 @@ class LineMovementsSpider(scrapy.Spider):
                 out['league'] = league
                 out['game_id'] = id
                 yield out
-
-
-

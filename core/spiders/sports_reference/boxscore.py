@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-import scrapy
 import bs4
+import scrapy
 
-from config import codes
+from core.constants import BASKETBALL_REFERENCE_URL
 from core.items import BoxscoreItem
 from .base_spider import SRSpider
-from core.constants import BASKETBALL_REFERENCE_URL
+
 
 class BoxscoreSpider(SRSpider):
     name = 'boxscore'

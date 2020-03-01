@@ -11,11 +11,16 @@ from core.utils import make_create_sql, make_insert_sql
 class CSVPipeline(object):
     def __init__(self):
         self.time_format = "%Y-%m-%d_%H%M%S"
-        self.fieldnames= {
-            "games": ["code", "game_date", "start_time", "home_team", "home_code", "home_points", "visiting_team", "visiting_code", "visitor_points", "has_ot","attendance", "winner"],
-            "pbp": ["code", "quarter", "time", "team", "player_1", "player_2", "player_1_name", "player_2_name", "score", "home_score", "away_score", "play"],
-            "boxscore": ['code', 'team', 'player_code', 'player', 'mp', 'fg', 'fga', 'fg_pct', 'fg3', 'fg3a', 'fg3_pct', 'ft', 'fta', 'ft_pct', 'orb', 'drb', 'trb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pts', 'plus_minus', 'reason'],
-            "shotchart": ['code', 'player_code', 'team', 'team_type', 'shot_location', 'x', 'y', 'made_shot', 'tip', 'quarter', 'time_left'],
+        self.fieldnames = {
+            "games": ["code", "game_date", "start_time", "home_team", "home_code", "home_points", "visiting_team",
+                      "visiting_code", "visitor_points", "has_ot", "attendance", "winner"],
+            "pbp": ["code", "quarter", "time", "team", "player_1", "player_2", "player_1_name", "player_2_name",
+                    "score", "home_score", "away_score", "play"],
+            "boxscore": ['code', 'team', 'player_code', 'player', 'mp', 'fg', 'fga', 'fg_pct', 'fg3', 'fg3a', 'fg3_pct',
+                         'ft', 'fta', 'ft_pct', 'orb', 'drb', 'trb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pts',
+                         'plus_minus', 'reason'],
+            "shotchart": ['code', 'player_code', 'team', 'team_type', 'shot_location', 'x', 'y', 'made_shot', 'tip',
+                          'quarter', 'time_left'],
             "line_movements": ['league', 'game_id']
         }
 
@@ -27,14 +32,14 @@ class CSVPipeline(object):
         filename = target_dir + spider_name + "_" + now_str + ".csv"
         self.file = open(filename, 'w')
         self.writer = csv.DictWriter(
-           self.file,
-           fieldnames=self.fieldnames[spider_name],
-           lineterminator='\n'
+            self.file,
+            fieldnames=self.fieldnames[spider_name],
+            lineterminator='\n'
         )
         self.writer.writeheader()
 
     def process_item(self, item, spider):
-            self.writer.writerow(dict(item))
+        self.writer.writerow(dict(item))
 
     def close_spider(self, spider):
         self.file.close()
@@ -71,4 +76,3 @@ class PostgresPipeline(object):
     def close_spider(self, spider):
         self.client.commit()
         self.client.close()
-

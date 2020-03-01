@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-import scrapy
-import bs4
-
-
 from datetime import datetime
-from core.items import GameItem
+
+import bs4
+import scrapy
+
 from core.constants import BASKETBALL_REFERENCE_URL, months
+from core.items import GameItem
 from .base_spider import SRSpider
 
 
@@ -85,4 +85,3 @@ class GamesSpider(SRSpider):
     def start_requests(self):
         for url in self.urls:
             yield scrapy.Request(url=url, callback=self.parse_item)
-

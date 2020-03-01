@@ -1,12 +1,11 @@
-import scrapy
-import json
 import bs4
+import scrapy
 
 # -*- coding: utf-8 -*-
 from core.constants import BASKETBALL_REFERENCE_URL
 
-class SRSpider(scrapy.Spider):
 
+class SRSpider(scrapy.Spider):
     start_url = BASKETBALL_REFERENCE_URL
     allowed_domains = ['basketball-reference.com']
 
@@ -23,5 +22,3 @@ class SRSpider(scrapy.Spider):
         home_team = home_href.split("/")[2]
         visiting_team = visit_href.split("/")[2]
         return (home_team, visiting_team)
-
-

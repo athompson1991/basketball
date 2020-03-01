@@ -11,6 +11,8 @@ ITEM_PIPELINES = {
     'core.pipelines.PostgresPipeline': 400
 }
 
+CODES_FILTER = '2019-04-01'
+
 database_specs = {
     "host": "localhost",
     "database": "sports",
@@ -32,7 +34,7 @@ database_specs = {
             'winner': {'dtype': 'varchar(10)'}
         },
         'boxscore': {
-            'code': {'dtype': 'character(12)', 'is_primary_key':True},
+            'code': {'dtype': 'character(12)', 'is_primary_key': True},
             'team': {'dtype': 'varchar(50)'},
             'player_code': {'dtype': 'varchar(15)'},
             'player': {'dtype': 'varchar(50)'},
@@ -52,7 +54,7 @@ database_specs = {
             'ast': {'dtype': ''},
             'stl': {'dtype': ''},
             'blk': {'dtype': ''},
-            'tov': {'dtype': ''} ,
+            'tov': {'dtype': ''},
             'pf': {'dtype': ''},
             'pts': {'dtype': ''},
             'plus_minus': {'dtype': ''},
@@ -60,8 +62,9 @@ database_specs = {
         },
         'pbp': {
             'code': {'dtype': 'character(12)'},
-            'quarter': {'dtype': 'varchar(2)'},
+            'quarter': {'dtype': 'integer'},
             'time': {'dtype': 'time'},
+            'seconds_into_game': {'dtype': 'integer'},
             'team': {'dtype': 'varchar(5)'},
             'player_1': {'dtype': 'varchar(9)'},
             'player_2': {'dtype': 'varchar(9)'},
@@ -70,8 +73,8 @@ database_specs = {
             'score': {'dtype': 'varchar(20)'},
             'home_score': {'dtype': 'integer'},
             'away_score': {'dtype': 'integer'},
+            'score_diff': {'dtype': 'integer'},
             'play': {'dtype': 'varchar(200)'}
         }
     }
 }
-
