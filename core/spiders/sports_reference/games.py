@@ -3,17 +3,19 @@ from datetime import datetime
 
 import bs4
 import scrapy
+import re
 
 from core.constants import BASKETBALL_REFERENCE_URL, months
 from core.items import GameItem
 from .base_spider import SRSpider
+from ...settings import SEASONS
 
 
 class GamesSpider(SRSpider):
     name = 'games'
 
     def __init__(self):
-        self.years = list(range(2000, 2020))
+        self.years = SEASONS
         self.urls = self.generate_urls()
 
     def generate_urls(self):
@@ -46,7 +48,7 @@ class GamesSpider(SRSpider):
         soup = bs4.BeautifulSoup(row_data[5].extract())
         home_points = soup.text
         soup = bs4.BeautifulSoup(row_data[7].extract())
-        has_ot = soup.text == 'OT'
+        has_ot = 'OT' in soup.text
         soup = bs4.BeautifulSoup(row_data[8].extract())
         attendance = soup.text.replace(",", "")
 
@@ -74,12 +76,14 @@ class GamesSpider(SRSpider):
         return row
 
     def parse_item(self, response):
-        link = response.url.split("/")[4]
+        link = response.url.split("/")[5]
         self.log(link)
+        season = int(re.findall(r'\d+', link)[0])
         schedule = response.css("table#schedule")
         schedule_rows = schedule.css("tr")
         for row in schedule_rows[1:]:
             row_item = self.parse_row(row)
+            row_item['season'] = season
             yield row_item
 
     def start_requests(self):

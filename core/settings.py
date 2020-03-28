@@ -11,16 +11,18 @@ ITEM_PIPELINES = {
     'core.pipelines.PostgresPipeline': 400
 }
 
-CODES_FILTER = '2019-04-01'
+SEASONS = list(range(2000, 2020))
+CODES_FILTER = '2010-01-01'
 
 database_specs = {
     "host": "localhost",
     "database": "sports",
-    "user": "postgres",
+    "user": "alex",
     "password": open("core/password").read(),
     'tables': {
         'games': {
             'code': {'dtype': 'character(12)', 'is_primary_key': True},
+            'season': {'dtype': 'integer'},
             'game_date': {'dtype': 'date'},
             'start_time': {'dtype': 'time'},
             'home_team': {'dtype': 'varchar(50)'},
@@ -38,27 +40,26 @@ database_specs = {
             'team': {'dtype': 'varchar(50)'},
             'player_code': {'dtype': 'varchar(15)'},
             'player': {'dtype': 'varchar(50)'},
-            'mp': {'dtype': ''},
-            'fg': {'dtype': ''},
-            'fga': {'dtype': ''},
-            'fg_pct': {'dtype': ''},
-            'fg3': {'dtype': ''},
-            'fg3a': {'dtype': ''},
-            'fg3_pct': {'dtype': ''},
-            'ft': {'dtype': ''},
-            'fta': {'dtype': ''},
-            'ft_pct': {'dtype': ''},
-            'orb': {'dtype': ''},
-            'drb': {'dtype': ''},
-            'trb': {'dtype': ''},
-            'ast': {'dtype': ''},
-            'stl': {'dtype': ''},
-            'blk': {'dtype': ''},
-            'tov': {'dtype': ''},
-            'pf': {'dtype': ''},
-            'pts': {'dtype': ''},
-            'plus_minus': {'dtype': ''},
-            'reason': {'dtype': ''}
+            'mp': {'dtype': 'varchar(6)'},
+            'fg': {'dtype': 'integer'},
+            'fga': {'dtype': 'integer'},
+            'fg_pct': {'dtype': 'varchar(5)'},
+            'fg3': {'dtype': 'integer'},
+            'fg3a': {'dtype': 'integer'},
+            'fg3_pct': {'dtype': 'varchar(5)'},
+            'ft': {'dtype': 'integer'},
+            'fta': {'dtype': 'integer'},
+            'ft_pct': {'dtype': 'varchar(5)'},
+            'orb': {'dtype': 'integer'},
+            'drb': {'dtype': 'integer'},
+            'trb': {'dtype': 'integer'},
+            'ast': {'dtype': 'integer'},
+            'stl': {'dtype': 'integer'},
+            'blk': {'dtype': 'integer'},
+            'tov': {'dtype': 'integer'},
+            'pf': {'dtype': 'integer'},
+            'pts': {'dtype': 'integer'},
+            'plus_minus': {'dtype': 'varchar(5)'}
         },
         'pbp': {
             'code': {'dtype': 'character(12)'},
@@ -74,7 +75,23 @@ database_specs = {
             'home_score': {'dtype': 'integer'},
             'away_score': {'dtype': 'integer'},
             'score_diff': {'dtype': 'integer'},
-            'play': {'dtype': 'varchar(200)'}
+            'play': {'dtype': 'varchar(200)'},
+            'score_change': {'dtype': 'integer'},
+            'scoring_team': {'dtype': 'varchar(10)'}
+        },
+        'shotchart': {
+            'code': {'dtype': 'character(12)'},
+            'player_code': {'dtype': 'varchar(9)'},
+            'team': {'dtype': 'varchar(10)'},
+            'team_type': {'dtype': 'varchar(20)'},
+            'shot_location': {'dtype': 'varchar(50)'},
+            'x': {'dtype': 'integer'},
+            'y': {'dtype': 'integer'},
+            'shot_type': {'dtype': 'varchar(9)'},
+            'made_shot': {'dtype': 'boolean'},
+            'tip': {'dtype': 'varchar(200)'},
+            'quarter': {'dtype': 'integer'},
+            'time_left': {'dtype': 'time'}
         }
     }
 }

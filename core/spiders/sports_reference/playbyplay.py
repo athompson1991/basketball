@@ -74,10 +74,23 @@ class PlaybyplaySpider(SRSpider):
             td_ls = row.css('td')
             if len(td_ls) == 6:
                 time = td_ls[0].xpath("text()")[0].extract()
+
+                home_score_change = td_ls[4].xpath("text()")[0].extract().replace('+', '').replace(u'\xa0', '')
+                away_score_change = td_ls[2].xpath("text()")[0].extract().replace('+', '').replace(u'\xa0', '')
+                if home_score_change == '' and away_score_change == '':
+                    score_change = None
+                    scoring_team = None
+                if home_score_change != '':
+                    score_change = int(home_score_change)
+                    scoring_team = 'home'
+                if away_score_change != '':
+                    score_change = int(away_score_change)
+                    scoring_team = 'away'
+
                 score = td_ls[3].xpath("text()")[0].extract()
                 score_split = score.split('-')
-                home_score = score_split[0]
-                away_score = score_split[1]
+                home_score = score_split[1]
+                away_score = score_split[0]
 
                 left_and_right = [
                     self.parse_left_or_right(td_ls[1], home_team),
@@ -90,8 +103,12 @@ class PlaybyplaySpider(SRSpider):
                 quarter = quarter.replace('q', '')
                 q_int = int(quarter)
 
-                previous_quarter_seconds = (q_int - 1) * 12 * 60
-                current_quarter_seconds = 720 - time.minute * 60 - time.second
+                if q_int < 5:
+                    previous_quarter_seconds = (q_int - 1) * 12 * 60
+                    current_quarter_seconds = 720 - time.minute * 60 - time.second
+                else:
+                    previous_quarter_seconds = 12 * 60 * 4 + (q_int - 5) * 12 * 60
+                    current_quarter_seconds = 300 - time.minute * 60 - time.second
                 seconds_into_game = previous_quarter_seconds + current_quarter_seconds
 
                 item = PlaybyplayItem(
@@ -108,6 +125,8 @@ class PlaybyplaySpider(SRSpider):
                     score=score,
                     home_score=int(home_score),
                     away_score=int(away_score),
-                    score_diff=int(home_score) - int(away_score)
+                    score_diff=int(home_score) - int(away_score),
+                    score_change=score_change,
+                    scoring_team=scoring_team
                 )
                 yield item

@@ -5,6 +5,7 @@ import scrapy
 from core.constants import BASKETBALL_REFERENCE_URL
 from core.items import BoxscoreItem
 from .base_spider import SRSpider
+from ...utils import get_codes
 
 
 class BoxscoreSpider(SRSpider):
@@ -12,7 +13,7 @@ class BoxscoreSpider(SRSpider):
 
     def __init__(self):
         self.teams = None
-        self.codes = ['201901010MIL']
+        self.codes = get_codes()
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]
@@ -22,7 +23,7 @@ class BoxscoreSpider(SRSpider):
         self.teams = [t.split("/")[-2] for t in teams]
         for team in self.teams:
             self.log("Code: {0}, team: {1}".format(code, team))
-            find_this = "table#box_" + team.lower() + "_basic"
+            find_this = "table#box-" + team.upper() + "-game-basic"
             basic_table = response.css(find_this)
             basic_table_body = basic_table.css("tbody")
             body_rows = basic_table_body[0].css("tr")

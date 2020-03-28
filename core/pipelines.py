@@ -11,18 +11,6 @@ from core.utils import make_create_sql, make_insert_sql
 class CSVPipeline(object):
     def __init__(self):
         self.time_format = "%Y-%m-%d_%H%M%S"
-        self.fieldnames = {
-            "games": ["code", "game_date", "start_time", "home_team", "home_code", "home_points", "visiting_team",
-                      "visiting_code", "visitor_points", "has_ot", "attendance", "winner"],
-            "pbp": ["code", "quarter", "time", "team", "player_1", "player_2", "player_1_name", "player_2_name",
-                    "score", "home_score", "away_score", "play"],
-            "boxscore": ['code', 'team', 'player_code', 'player', 'mp', 'fg', 'fga', 'fg_pct', 'fg3', 'fg3a', 'fg3_pct',
-                         'ft', 'fta', 'ft_pct', 'orb', 'drb', 'trb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pts',
-                         'plus_minus', 'reason'],
-            "shotchart": ['code', 'player_code', 'team', 'team_type', 'shot_location', 'x', 'y', 'made_shot', 'tip',
-                          'quarter', 'time_left'],
-            "line_movements": ['league', 'game_id']
-        }
 
     def open_spider(self, spider):
         spider_name = spider.name
@@ -33,7 +21,7 @@ class CSVPipeline(object):
         self.file = open(filename, 'w')
         self.writer = csv.DictWriter(
             self.file,
-            fieldnames=self.fieldnames[spider_name],
+            fieldnames=database_specs['tables'][spider_name].keys(),
             lineterminator='\n'
         )
         self.writer.writeheader()
@@ -43,6 +31,7 @@ class CSVPipeline(object):
 
     def close_spider(self, spider):
         self.file.close()
+
 
 
 class PostgresPipeline(object):
@@ -55,10 +44,12 @@ class PostgresPipeline(object):
             user=database_specs['user'],
             password=database_specs['password']
         )
+
         cursor = self.client.cursor()
-        cursor.execute("drop table if exists " + spider.name)
+        cursor.execute('drop table if exists ' + spider.name)
         cursor.close()
         self.client.commit()
+
         cursor = self.client.cursor()
         cursor.execute(self.create_table_sql)
         cursor.close()

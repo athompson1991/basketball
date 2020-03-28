@@ -3,6 +3,7 @@ import scrapy
 
 class GameItem(scrapy.Item):
     code = scrapy.Field()
+    season = scrapy.Field()
     game_date = scrapy.Field()
     start_time = scrapy.Field()
     home_team = scrapy.Field()
@@ -31,6 +32,8 @@ class PlaybyplayItem(scrapy.Item):
     away_score = scrapy.Field()
     score_diff = scrapy.Field()
     play = scrapy.Field()
+    score_change = scrapy.Field()
+    scoring_team = scrapy.Field()
 
 
 class BoxscoreItem(scrapy.Item):
@@ -69,6 +72,7 @@ class ShotChartItem(scrapy.Item):
     x = scrapy.Field(default="NA")
     y = scrapy.Field(default="NA")
     made_shot = scrapy.Field(default="NA")
+    shot_type = scrapy.Field()
     tip = scrapy.Field(default="NA")
     player_code = scrapy.Field(default="NA")
     quarter = scrapy.Field(default="NA")
