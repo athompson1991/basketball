@@ -18,20 +18,25 @@ def make_urls(start, end):
 class LineMovementsSpider(scrapy.Spider):
     name = 'line_movements'
     allowed_domains = ['scoresandodds.com']
-    start_urls = make_urls("2018-01-01", "2020-03-01")
+    start_urls = make_urls("2018-01-01", "2020-01-01")
 
     def parse(self, response):
         raw_json = json.loads(response.text)
-        active_leagues = raw_json['activeLeagues']
-        active_league_games = raw_json['activeLeagueGames']
-        for i in range(len(active_leagues)):
-            games = active_league_games[i]['games']
-            league = active_league_games[i]['league']
-            if league == "nba":
-                for game in games:
-                    id = game['_id']
-                    line_moves = game['lineMovements']
-                    for move in line_moves:
-                        move['league'] = league
-                        move['game_id'] = id
-                    yield move
+        active_league_games = {i['league']:i for i in raw_json['activeLeagueGames']}
+        if 'nba' in active_league_games.keys():
+            games = active_league_games['nba']['games']
+            for game in games:
+                key = game['gamePrimaryId']
+                game_date = game['gameDateTime']
+                home_team = game['homeTeam']['location'] + ' ' + game['homeTeam']['nickname']
+                away_team = game['awayTeam']['location'] + ' ' + game['awayTeam']['nickname']
+                money_line = game['lineBetFormatted']['moneyLine']
+                out = {
+                    'key': key,
+                    'date_timestamp': game_date,
+                    'date_url': response.url.split("=")[1],
+                    'home_team': home_team,
+                    'away_team': away_team,
+                    **money_line
+                }
+                yield out

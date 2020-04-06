@@ -2,7 +2,7 @@
 
 BOT_NAME = 'basketballbot'
 
-SPIDER_MODULES = ['core.spiders.scores_and_odds', 'core.spiders.sports_reference']
+SPIDER_MODULES = ['core.spiders.scores_and_odds', 'core.spiders.sports_reference', 'core.spiders.sportsbook_review']
 NEWSPIDER_MODULE = 'core.spiders'
 
 ROBOTSTXT_OBEY = True
@@ -12,7 +12,10 @@ ITEM_PIPELINES = {
 }
 
 SEASONS = list(range(2000, 2020))
-CODES_FILTER = '2010-01-01'
+CODES_FILTER = '2015-01-01'
+
+AUTOTHROTTLE_ENABLED = True
+
 
 database_specs = {
     "host": "localhost",
@@ -92,6 +95,35 @@ database_specs = {
             'tip': {'dtype': 'varchar(200)'},
             'quarter': {'dtype': 'integer'},
             'time_left': {'dtype': 'time'}
+        },
+        'line_movements': {
+            'key': {'dtype': 'integer'},
+            'date_timestamp': {'dtype': 'timestamp'},
+            'date_url': {'dtype': 'date'},
+            'home_team': {'dtype': 'varchar(30)'},
+            'away_team': {'dtype': 'varchar(30)'},
+            'home': {'dtype': 'varchar(10)'},
+            'away': {'dtype': 'varchar(10)'}
+        },
+        'events': {
+            'eid': {'dtype': 'integer'},
+            'lid': {'dtype':'integer'},
+            'spid': {'dtype': 'integer'},
+            'des': {'dtype': 'varchar(100)'},
+            'dt': {'dtype': 'timestamp'},
+            'home_partid': {'dtype': 'integer'},
+            'home_team': {'dtype': 'varchar(100)'},
+            'home_code': {'dtype': 'varchar(10)'},
+            'away_team': {'dtype': 'varchar(100)'},
+            'away_partid': {'dtype': 'integer'},
+            'away_code': {'dtype': 'varchar(10)'}
+        },
+        'sr_money_lines': {
+            'lineid': {'dtype': 'varchar(100)'},
+            'eid': {'dtype': 'integer'},
+            'paid': {'dtype':'integer'},
+            'partid': {'dtype': 'integer'},
+            'ap': {'dtype': 'varchar(20)'},
         }
     }
 }

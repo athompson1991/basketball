@@ -52,3 +52,23 @@ def get_codes():
     cursor.close()
     conn.commit()
     return [row[0] for row in rows]
+
+def get_eids():
+    conn = psycopg2.connect(
+        host=database_specs['host'],
+        database=database_specs['database'],
+        user=database_specs['user'],
+        password=database_specs['password']
+    )
+    cursor = conn.cursor()
+    cursor.execute("select eid from events")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.commit()
+    return [row[0] for row in rows]
+
+
+
+def datetime_to_milliseconds(dt):
+    root = datetime.utcfromtimestamp(0)
+    return int((dt - root).total_seconds() * 1000)

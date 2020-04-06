@@ -30,10 +30,14 @@ class BoxscoreSpider(SRSpider):
             for row in body_rows:
                 soup = bs4.BeautifulSoup(row.extract())
                 player = soup.find("th").text
+
                 if player != "Reserves":
                     th = soup.find_all('th')
                     player_code = th[0].attrs['data-append-csv']
                     tds = soup.find_all("td")
+                    if(len(tds) < 10):
+                        print("DID NOT PLAY")
+                        break
                     stats = {td["data-stat"]: td.text for td in tds}
                     stats["code"] = code
                     stats["player"] = player
