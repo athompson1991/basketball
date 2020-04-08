@@ -1,17 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import scrapy
 import json
 
-from core.utils import datetime_to_milliseconds
+from core.utils import make_ms
 
-def make_ms(start, end):
-    datetime_start = datetime.strptime(start, '%Y-%m-%d')
-    datetime_end = datetime.strptime(end, '%Y-%m-%d')
-    delta = datetime_end - datetime_start
-    dates = [datetime_start + timedelta(i) for i in range(delta.days)]
-    ms = [datetime_to_milliseconds(date) for date in dates]
-    return ms
 
 class EventSpider(scrapy.Spider):
     name = 'events'
@@ -62,7 +55,6 @@ class EventSpider(scrapy.Spider):
             event['home_code'] = home['abbr']
             event['away_code'] = away['abbr']
             yield event
-
 
     def start_requests(self):
         days = make_ms("2014-01-01", "2020-04-01")

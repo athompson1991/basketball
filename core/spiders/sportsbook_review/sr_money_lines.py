@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 import scrapy
 import json
 

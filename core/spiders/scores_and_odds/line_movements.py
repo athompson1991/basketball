@@ -1,24 +1,16 @@
 # -*- coding: utf-8 -*-
 import json
-from datetime import datetime, timedelta
-
 import scrapy
 
+from core.utils import make_urls, generate_dates
 
-def make_urls(start, end):
-    url_stem = 'https://api.scoresandodds.com/api/scores/scoresandoddsdotcom/home2'
-    datetime_start = datetime.strptime(start, '%Y-%m-%d')
-    datetime_end = datetime.strptime(end, '%Y-%m-%d')
-    delta = datetime_end - datetime_start
-    dates = [datetime_start + timedelta(i) for i in range(delta.days)]
-    urls = [url_stem + "?gameDate=" + date.strftime("%Y-%m-%d") for date in dates]
-    return urls
-
+url_stem = 'https://api.scoresandodds.com/api/scores/scoresandoddsdotcom/home2'
 
 class LineMovementsSpider(scrapy.Spider):
     name = 'line_movements'
     allowed_domains = ['scoresandodds.com']
-    start_urls = make_urls("2018-01-01", "2020-01-01")
+    dates = generate_dates("2018-06-01", "2020-01-01")
+    start_urls = [url_stem + "?gameDate=" + date.strftime("%Y-%m-%d") for date in dates]
 
     def parse(self, response):
         raw_json = json.loads(response.text)

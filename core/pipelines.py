@@ -1,11 +1,9 @@
 import csv
 import datetime
 
-import psycopg2
-
 from config import output_directory
-from core.settings import database_specs
-from core.utils import make_create_sql, make_insert_sql
+from core.db import database_specs
+from core.utils import make_create_sql, make_insert_sql, create_connection
 
 
 class CSVPipeline(object):
@@ -33,18 +31,11 @@ class CSVPipeline(object):
         self.file.close()
 
 
-
 class PostgresPipeline(object):
 
     def open_spider(self, spider):
         self.create_table_sql = make_create_sql(spider.name, database_specs['tables'][spider.name])
-        self.client = psycopg2.connect(
-            host=database_specs['host'],
-            database=database_specs['database'],
-            user=database_specs['user'],
-            password=database_specs['password']
-        )
-
+        self.client = create_connection()
         cursor = self.client.cursor()
         cursor.execute('drop table if exists ' + spider.name)
         cursor.close()
