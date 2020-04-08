@@ -116,8 +116,6 @@ venv.bak/
 .vs/
 basketball.pyproj
 *.csv
-games/
-pbp/
 Icon
 log.txt
 Icon*
@@ -125,3 +123,5 @@ Icon*
 
 analysis/script2.py
 analysis/script.py
+notebooks/Sports Betting Overview.ipynb
+notebooks/Untitled.ipynb
