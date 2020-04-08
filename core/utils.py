@@ -7,26 +7,6 @@ import psycopg2
 
 from core.settings import database_specs, CODES_FILTER
 
-
-def get_most_recent_scrape(target_dir, head="games"):
-    regex_pattern = '%Y-%m-%d_%H%M%S'
-    regex = re.compile(r'\.csv')
-    files = os.listdir(target_dir)
-    csv_files = list(filter(regex.search, files))
-    dates = [datetime.strptime(f, head + "_" + regex_pattern + ".csv") for f in csv_files]
-    out = head + "_" + max(dates).strftime("%Y-%m-%d_%H%M%S") + ".csv"
-    return out
-
-
-def get_codes(target_dir):
-    most_recent_scrape = get_most_recent_scrape(target_dir)
-    filename = target_dir + most_recent_scrape
-    with open(filename, 'r', newline='') as f:
-        reader = csv.DictReader(f)
-        out = [row['code'] for row in reader]
-    return out
-
-
 def make_create_sql(table_name, specs):
     col_list = [key + ' ' + specs[key]['dtype'] for key in specs.keys()]
     return "create table " + table_name + "(\n" + ',\n'.join(col_list) + ')'
