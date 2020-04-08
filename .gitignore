@@ -97,7 +97,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-*analysis/*.py
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -122,3 +122,6 @@ Icon
 log.txt
 Icon*
 *.swp
+
+analysis/script2.py
+analysis/script.py
