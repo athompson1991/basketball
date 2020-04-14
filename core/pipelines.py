@@ -17,15 +17,18 @@ class CSVPipeline(object):
         target_dir = output_directory + "/" + spider_name + "/"
         filename = target_dir + spider_name + "_" + now_str + ".csv"
         self.file = open(filename, 'w')
+        self.colnames = database_specs['tables'][spider_name].keys()
         self.writer = csv.DictWriter(
             self.file,
-            fieldnames=database_specs['tables'][spider_name].keys(),
+            fieldnames=self.colnames,
             lineterminator='\n'
         )
         self.writer.writeheader()
 
     def process_item(self, item, spider):
-        self.writer.writerow(dict(item))
+        item = dict(item)
+        row = {col: item[col] for col in self.colnames}
+        self.writer.writerow(row)
 
     def close_spider(self, spider):
         self.file.close()

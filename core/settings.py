@@ -12,8 +12,8 @@ NEWSPIDER_MODULE = 'core.spiders'
 
 ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
-    # 'core.pipelines.CSVPipeline': 300,
-    'core.pipelines.PostgresPipeline': 400
+    'core.pipelines.CSVPipeline': 300,
+    # 'core.pipelines.PostgresPipeline': 400
 }
 
 SEASONS = list(range(2000, 2020))
