@@ -2,7 +2,7 @@
 import json
 import scrapy
 
-from core.utils import make_urls, generate_dates
+from core.utils import generate_dates
 
 url_stem = 'https://api.scoresandodds.com/api/scores/scoresandoddsdotcom/home2'
 
