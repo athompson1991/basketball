@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import re
 from datetime import datetime
 
 import bs4
 import scrapy
-import re
 
 from core.constants import BASKETBALL_REFERENCE_URL, months
 from core.items import GameItem
@@ -22,7 +22,8 @@ class GamesSpider(SRSpider):
         out = []
         for year in self.years:
             for month in months:
-                url = BASKETBALL_REFERENCE_URL + "/leagues/NBA_" + str(year) + "_games-" + month + ".html"
+                url = BASKETBALL_REFERENCE_URL + "/leagues/NBA_" + str(
+                    year) + "_games-" + month + ".html"
                 out.append(url)
         return out
 

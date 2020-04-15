@@ -1,5 +1,6 @@
-import scrapy
 import json
+
+import scrapy
 
 from core.sbreview import current_lines
 from core.utils import get_eids
@@ -10,7 +11,8 @@ class SRMoneyLines(scrapy.Spider):
     allowed_domains = ['sportsbookreview.com']
 
     def __init__(self):
-        self.request_stem = "https://www.sportsbookreview.com/ms-odds-v2/odds-v2-service?query="
+        self.request_stem = "https://www.sportsbookreview.com/ms-odds-v2" \
+                            "/odds-v2-service?query= "
 
     def parse(self, response):
         raw_json = json.loads(response.text)

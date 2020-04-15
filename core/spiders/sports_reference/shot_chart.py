@@ -28,8 +28,10 @@ class ShotChartSpider(SRSpider):
 
         home_team, visiting_team = self.get_team_codes(response)
 
-        home_wrapper = response.css('div#wrapper-' + home_team).css('div#shots-' + home_team)
-        visitor_wrapper = response.css('div#wrapper-' + visiting_team).css('div#shots-' + visiting_team)
+        home_wrapper = response.css('div#wrapper-' + home_team).\
+            css('div#shots-' + home_team)
+        visitor_wrapper = response.css('div#wrapper-' + visiting_team).\
+            css('div#shots-' + visiting_team)
 
         shots_soup = bs4.BeautifulSoup(home_wrapper[0].extract())
         divs = shots_soup.find_all('div')
@@ -94,7 +96,8 @@ class ShotChartSpider(SRSpider):
         quarter = data_ls[1].replace("q-", "")
         player_code = data_ls[2].replace("p-", "")
 
-        shot_type = '2-pointer' if '2-pointer' in tip else '3-pointer' if '3-pointer' in tip else 'other'
+        shot_type = '2-pointer' if '2-pointer' in tip else \
+            '3-pointer' if '3-pointer' in tip else 'other'
 
         out = {
             "shot_location": shot_location,

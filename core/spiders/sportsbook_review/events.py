@@ -12,7 +12,9 @@ class EventSpider(scrapy.Spider):
     allowed_domains = ['sportsbookreview.com']
 
     def __init__(self):
-        self.request_stem = "https://www.sportsbookreview.com/ms-odds-v2/odds-v2-service?query="
+        self.request_stem = \
+            "https://www.sportsbookreview.com/ms-odds-v2/odds-v2-service?" \
+            "query="
         self.core_query = events_by_date_by_league_group(1)
 
     def parse(self, response):
@@ -33,10 +35,9 @@ class EventSpider(scrapy.Spider):
     def start_requests(self):
         days = make_ms("2007-01-01", "2020-04-01")
         for t in days:
-            url = (self.request_stem + self.core_query).replace("\n", "").replace("\t", "").replace('"', '\"')
-            self.log("scrape date: " + datetime.utcfromtimestamp(t / 1000).strftime("%Y-%m-%d"))
+            url = (self.request_stem + self.core_query).replace("\n", "").\
+                replace("\t", "").replace('"', '\"')
+            self.log("scrape date: " + datetime.utcfromtimestamp(t / 1000).
+                     strftime("%Y-%m-%d"))
             url = url.replace("<date>", str(t))
             yield scrapy.Request(url=url, callback=self.parse)
-
-
-

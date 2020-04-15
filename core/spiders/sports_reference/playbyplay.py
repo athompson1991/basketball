@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Play by Play data
-This module contains the spider that gets the play-by-play schedule for a full game
+This module contains the spider that gets the play-by-play schedule for a game
 from the basketball-reference website.
 """
 import datetime
@@ -29,7 +29,7 @@ class PlaybyplaySpider(SRSpider):
 
     def get_player_codes(self, soup):
         players = soup.find_all("a")
-        players_codes = [player.get("href").split("/")[3][:-5] for player in players]
+        players_codes = [p.get("href").split("/")[3][:-5] for p in players]
         player_names = [player.text for player in players]
         n = len(players_codes)
         if n == 1:
@@ -55,7 +55,8 @@ class PlaybyplaySpider(SRSpider):
         out["play"] = soup.text
         if out["play"].strip() != "":
             out["team"] = team_type
-            out["player_1"], out["player_2"], out["player_1_name"], out["player_2_name"] = self.get_player_codes(soup)
+            out["player_1"], out["player_2"], out["player_1_name"], out[
+                "player_2_name"] = self.get_player_codes(soup)
         else:
             out = None
         return out
@@ -75,8 +76,10 @@ class PlaybyplaySpider(SRSpider):
             if len(td_ls) == 6:
                 time = td_ls[0].xpath("text()")[0].extract()
 
-                home_score_change = td_ls[4].xpath("text()")[0].extract().replace('+', '').replace(u'\xa0', '')
-                away_score_change = td_ls[2].xpath("text()")[0].extract().replace('+', '').replace(u'\xa0', '')
+                home_score_change = td_ls[4].xpath("text()")[0]. \
+                    extract().replace('+', '').replace(u'\xa0', '')
+                away_score_change = td_ls[2].xpath("text()")[0]. \
+                    extract().replace('+', '').replace(u'\xa0', '')
                 if home_score_change == '' and away_score_change == '':
                     score_change = None
                     scoring_team = None
@@ -104,12 +107,12 @@ class PlaybyplaySpider(SRSpider):
                 q_int = int(quarter)
 
                 if q_int < 5:
-                    previous_quarter_seconds = (q_int - 1) * 12 * 60
-                    current_quarter_seconds = 720 - time.minute * 60 - time.second
+                    previous_q_seconds = (q_int - 1) * 12 * 60
+                    current_q_seconds = 720 - time.minute * 60 - time.second
                 else:
-                    previous_quarter_seconds = 12 * 60 * 4 + (q_int - 5) * 12 * 60
-                    current_quarter_seconds = 300 - time.minute * 60 - time.second
-                seconds_into_game = previous_quarter_seconds + current_quarter_seconds
+                    previous_q_seconds = 12 * 60 * 4 + (q_int - 5) * 12 * 60
+                    current_q_seconds = 300 - time.minute * 60 - time.second
+                seconds_into_game = previous_q_seconds + current_q_seconds
 
                 item = PlaybyplayItem(
                     code=code,

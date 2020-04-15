@@ -88,7 +88,7 @@ database_specs = {
         },
         'events': {
             'eid': {'dtype': 'integer'},
-            'lid': {'dtype':'integer'},
+            'lid': {'dtype': 'integer'},
             'spid': {'dtype': 'integer'},
             'des': {'dtype': 'varchar(100)'},
             'dt': {'dtype': 'timestamp'},
@@ -102,7 +102,7 @@ database_specs = {
         'sr_money_lines': {
             'lineid': {'dtype': 'varchar(100)'},
             'eid': {'dtype': 'integer'},
-            'paid': {'dtype':'integer'},
+            'paid': {'dtype': 'integer'},
             'partid': {'dtype': 'integer'},
             'ap': {'dtype': 'varchar(20)'},
         }

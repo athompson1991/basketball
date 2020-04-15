@@ -1,5 +1,6 @@
 from sklearn.ensemble import AdaBoostClassifier
 
+
 class AdaBoost:
     def __init__(self):
         self.adaBoost = AdaBoostClassifier(n_estimators=100)
