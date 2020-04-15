@@ -3,6 +3,7 @@ from datetime import datetime
 import scrapy
 import json
 
+from core.sbreview import events_by_date_by_league_group
 from core.utils import make_ms
 
 
@@ -12,32 +13,7 @@ class EventSpider(scrapy.Spider):
 
     def __init__(self):
         self.request_stem = "https://www.sportsbookreview.com/ms-odds-v2/odds-v2-service?query="
-        self.core_query = """
-        {
-            eventsByDateByLeagueGroup( 
-                es: ["in-progress", "scheduled", "complete", "suspended", "delayed", "postponed", "retired", "canceled"],
-                leagueGroups: [{ mtid: 83, lid: 5, spid: 5 }],
-                providerAcountOpener: 3,
-                hoursRange: 25,
-                showEmptyEvents: false,
-                marketTypeLayout: "PARTICIPANTS",
-                ic: false,
-                startDate: <date>,
-                timezoneOffset: -5,
-                nof: true,
-                hl: true,
-                sort: {by: ["lid", "dt", "des"], order: ASC}
-                )
-                {
-                events {
-                    eid lid spid des dt es rid ic ven tvs cit cou st sta hl seid writeingame plays(pgid: 2, limitLastSeq: 3, pgidWhenFinished: -1) { eid sqid siid gid nam val tim} participants {
-                        eid partid partbeid psid ih rot tr sppil sppic startingPitcher { fn lnam } 
-                        source { ... on Player { pid fn lnam } ... on Team { tmid lid tmblid nam nn sn abbr cit senam imageurl } ... on ParticipantGroup { partgid nam lid participants { eid partid psid ih rot source { ... on Player { pid fn lnam } ... on Team { tmid lid nam nn sn abbr cit } } } } } 
-                    }
-                }
-            }
-        }
-        """
+        self.core_query = events_by_date_by_league_group(1)
 
     def parse(self, response):
         raw_json = json.loads(response.text)
