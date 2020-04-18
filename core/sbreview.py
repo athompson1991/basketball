@@ -16,7 +16,8 @@ def events_by_date_by_league_group(date):
     string = """
     {
         eventsByDateByLeagueGroup( 
-            es: ["in-progress", "scheduled", "complete", "suspended", "delayed", "postponed", "retired", "canceled"],
+            es: ["in-progress", "scheduled", "complete", "suspended",
+                 "delayed", "postponed", "retired", "canceled"],
             leagueGroups: [{ mtid: 83, lid: 5, spid: 5 }],
             providerAcountOpener: 3,
             hoursRange: 25,
@@ -30,10 +31,12 @@ def events_by_date_by_league_group(date):
             sort: {by: ["lid", "dt", "des"], order: ASC}
         ) {
             events {
-                eid lid spid des dt es rid ic ven tvs cit cou st sta hl seid writeingame
+                eid lid spid des dt es rid ic ven tvs cit cou 
+                st sta hl seid writeingame
                 participants {
                     eid partid partbeid psid ih rot tr sppil sppic source {
-                     ... on Team { tmid lid tmblid nam nn sn abbr cit senam imageurl } 
+                     ... on Team { tmid lid tmblid nam nn sn abbr cit 
+                                   senam imageurl } 
                      ... on ParticipantGroup {
                         partgid nam lid participants {
                             eid partid psid ih rot source {
