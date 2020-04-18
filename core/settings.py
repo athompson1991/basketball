@@ -16,7 +16,9 @@ ITEM_PIPELINES = {
     # 'core.pipelines.PostgresPipeline': 400
 }
 
-SEASONS = list(range(2000, 2020))
+SEASONS = list(range(2010, 2020))
 CODES_FILTER = '2015-01-01'
 
 AUTOTHROTTLE_ENABLED = True
+
+OUTPUT_DIRECTORY = "data"

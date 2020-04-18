@@ -8,7 +8,7 @@ import scrapy
 from core.constants import BASKETBALL_REFERENCE_URL, months
 from core.items import GameItem
 from .base_spider import SRSpider
-from ...settings import SEASONS
+from core.settings import SEASONS
 
 
 class GamesSpider(SRSpider):

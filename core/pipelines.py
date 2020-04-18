@@ -1,7 +1,7 @@
 import csv
 import datetime
 
-from config import output_directory
+from core.settings import OUTPUT_DIRECTORY
 from core.db import database_specs
 from core.utils import make_create_sql, make_insert_sql, create_connection
 
@@ -14,7 +14,7 @@ class CSVPipeline(object):
         spider_name = spider.name
         now = datetime.datetime.now()
         now_str = now.strftime(self.time_format)
-        target_dir = output_directory + "/" + spider_name + "/"
+        target_dir = OUTPUT_DIRECTORY + "/" + spider_name + "/"
         filename = target_dir + spider_name + "_" + now_str + ".csv"
         self.file = open(filename, 'w')
         self.colnames = database_specs['tables'][spider_name].keys()
@@ -37,7 +37,10 @@ class CSVPipeline(object):
 class PostgresPipeline(object):
 
     def open_spider(self, spider):
-        self.create_table_sql = make_create_sql(spider.name, database_specs['tables'][spider.name])
+        self.create_table_sql = make_create_sql(
+            spider.name,
+            database_specs['tables'][spider.name]
+        )
         self.client = create_connection()
         cursor = self.client.cursor()
         cursor.execute('drop table if exists ' + spider.name)
