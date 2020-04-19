@@ -8,5 +8,4 @@ install:
   - pip install -r requirements.txt
 script:
   - pytest
-after_script:
-  - "bash ./script.sh"
+  - bash ./script.sh
