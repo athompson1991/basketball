@@ -1,6 +1,7 @@
 from core.settings import ITEM_PIPELINES
 
-if 'core.pipelines.PostgresPipeline' in ITEM_PIPELINES:
+PASSWORD = None
+if 'core.pipelines.PostgresPipeline' in ITEM_PIPELINES.keys():
     PASSWORD = open("core/password").read()
 
 database_specs = {

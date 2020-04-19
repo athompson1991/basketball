@@ -9,4 +9,4 @@ install:
 script:
   - pytest
 after_script:
-  - "./script.sh"
+  - "bash ./script.sh"
