@@ -11,9 +11,12 @@ from ...utils import get_codes
 class BoxscoreSpider(SRSpider):
     name = 'boxscore'
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.teams = None
-        self.codes = get_codes()
+        if "code" in kwargs.keys():
+            self.codes = [kwargs["code"]]
+        else:
+            self.codes = get_codes()
 
     def parse(self, response):
         code = response.url.split("/")[-1][:-5]

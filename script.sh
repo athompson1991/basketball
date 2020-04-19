@@ -4,6 +4,12 @@ source venv/bin/activate
 
 mkdir data
 mkdir data/games
+mkdir data/boxscore
+mkdir data/pbp
+mkdir data/shotchart
 
-echo Scraping Games
-scrapy crawl games
+scrapy crawl games -a year=2019
+scrapy crawl shotchart -a code="201810180WAS"
+scrapy crawl pbp -a code="201810180WAS"
+scrapy crawl boxscore -a code="201810180WAS"
+

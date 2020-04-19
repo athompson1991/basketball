@@ -14,8 +14,10 @@ from core.settings import SEASONS
 class GamesSpider(SRSpider):
     name = 'games'
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.years = SEASONS
+        if "year" in kwargs.keys():
+            self.years = [kwargs["year"]]
         self.urls = self.generate_urls()
 
     def generate_urls(self):

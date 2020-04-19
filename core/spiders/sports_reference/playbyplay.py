@@ -17,9 +17,12 @@ from .base_spider import SRSpider
 class PlaybyplaySpider(SRSpider):
     name = 'pbp'
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
-        self.codes = get_codes()
+        if "code" in kwargs.keys():
+            self.codes = [kwargs['code']]
+        else:
+            self.codes = get_codes()
 
     def start_requests(self):
         url_stem = BASKETBALL_REFERENCE_URL + "/boxscores/pbp/"
