@@ -12,8 +12,8 @@ NEWSPIDER_MODULE = 'core.spiders'
 
 ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
-    'core.pipelines.CSVPipeline': 300,
-    # 'core.pipelines.PostgresPipeline': 400
+    'core.pipelines.PostgresPipeline': 400,
+    # 'core.pipelines.CSVPipeline': 300
 }
 
 SEASONS = list(range(2010, 2020))
@@ -23,4 +23,4 @@ AUTOTHROTTLE_ENABLED = True
 
 OUTPUT_DIRECTORY = "data"
 
-LOG_FILE = "scraping.log"
+# LOG_FILE = "scraping.log"

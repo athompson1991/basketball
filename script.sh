@@ -2,8 +2,6 @@
 
 source venv/bin/activate
 
-echo "password123" >> core/password
-
 mkdir data
 mkdir data/games
 mkdir data/boxscore

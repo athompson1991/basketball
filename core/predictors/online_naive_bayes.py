@@ -36,6 +36,7 @@ class OnlineNaiveBayes:
             if label not in self.countNum:
                 self.countNum[label] = 0
             self.countNum[label] += 1
+
         # Update the probability of each label
         for i in self.countNum.keys():
             self.prob_y[i] = self.countNum[i] / self.data_num

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 import psycopg2
+import numpy as np
 
 from core.settings import CODES_FILTER
 from core.db import database_specs
@@ -55,3 +56,18 @@ def make_ms(start, end):
     dates = generate_dates(start, end)
     ms = [datetime_to_milliseconds(date) for date in dates]
     return ms
+
+def get_implied_probability(ml):
+    if ml > 0:
+        return 100 / (ml + 100)
+    else:
+        return -ml / (-ml + 100)
+
+def zero_to_one(x):
+    return np.exp(x)/(1+np.exp(x))
+
+def to_infinity(x):
+    return np.log(x/(1-x))
+
+def get_implied_probability_vec(ml_vec):
+    return np.array([get_implied_probability(ml) for ml in ml_vec])

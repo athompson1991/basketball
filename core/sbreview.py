@@ -15,7 +15,7 @@ def current_lines(eid, mtid=83, catid=133):
 def events_by_date_by_league_group(date):
     string = """
     {
-        eventsByDateByLeagueGroup( 
+        eventsByDateByLeagueGroup(
             es: ["in-progress", "scheduled", "complete", "suspended",
                  "delayed", "postponed", "retired", "canceled"],
             leagueGroups: [{ mtid: 83, lid: 5, spid: 5 }],
