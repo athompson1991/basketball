@@ -71,3 +71,25 @@ def to_infinity(x):
 
 def get_implied_probability_vec(ml_vec):
     return np.array([get_implied_probability(ml) for ml in ml_vec])
+
+def join_stats(stat_df, game_df, side='home', i=1):
+    stat_df = stat_df.rename(columns=lambda x: x + '_' + side + '_lag_' + str(i))
+    stat_df = stat_df.assign(game_num_lag_join=stat_df['game_num_' + side + '_lag_' + str(i)] + i)
+    merged = game_df.merge(
+        stat_df,
+        left_on=[side + '_code', side + '_game_num'],
+        right_on=['team_' + side + '_lag_' + str(i), 'game_num_lag_join']
+    )
+    merged = merged.filter(regex='^code$|.*_' + side + '_lag')
+    return merged
+
+def join_away_and_home(stat_df, game_df, lags=[1]):
+    dfs = []
+    for lag in lags:
+        home = join_stats(stat_df, game_df, side='home', i=lag).set_index('code')
+        away = join_stats(stat_df, game_df, side='away', i=lag).set_index('code')
+        dfs.append(home)
+        dfs.append(away)
+    game_df = game_df.set_index('code')
+    game_df = game_df.join(dfs)
+    return game_df
