@@ -42,6 +42,7 @@ class BoxscoreItem(scrapy.Item):
     player_code = scrapy.Field(default="NA")
     player = scrapy.Field(default="NA")
     mp = scrapy.Field(default="NA")
+    mp_num = scrapy.Field()
     fg = scrapy.Field(default="NA")
     fga = scrapy.Field(default="NA")
     fg_pct = scrapy.Field(default="NA")

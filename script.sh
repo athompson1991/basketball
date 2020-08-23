@@ -2,6 +2,8 @@
 
 source venv/bin/activate
 
+rm -rf data
+
 mkdir data
 mkdir data/games
 mkdir data/boxscore

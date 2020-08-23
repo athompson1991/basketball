@@ -2,8 +2,9 @@ from datetime import datetime, timedelta
 
 import psycopg2
 import numpy as np
+import pandas as pd
 
-from core.settings import CODES_FILTER
+from core.settings import CODES_FILTER, ITEM_PIPELINES
 from core.db import database_specs
 
 
@@ -36,10 +37,18 @@ def run_query(sql):
     return data
 
 def get_codes():
-    return run_query("select code from games where game_date >= date('" + CODES_FILTER + "')")
+    if 'core.pipelines.CSVPipeline' in ITEM_PIPELINES.keys():
+        codes = pd.read_csv("fixed_db/games.csv").code
+    else:
+        codes = run_query("select code from games where "
+                  "game_date >= date('" + CODES_FILTER + "')")
+    return codes
 
 def get_eids():
     return run_query("select eid from events")
+
+def get_player_codes(start_date = 1900):
+    return run_query("select code from player_directory where year_min >= " + str(start_date))
 
 def datetime_to_milliseconds(dt):
     root = datetime.utcfromtimestamp(0)

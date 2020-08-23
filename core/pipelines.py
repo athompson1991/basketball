@@ -56,7 +56,6 @@ class PostgresPipeline(object):
         sql_specs = database_specs['tables'][spider.name]
         cursor = self.client.cursor()
         self.insert_game_sql = make_insert_sql(spider.name, sql_specs)
-        print(self.insert_game_sql)
         cursor.execute(self.insert_game_sql, item)
         cursor.close()
         self.client.commit()

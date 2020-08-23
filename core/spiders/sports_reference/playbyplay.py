@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 """Play by Play data
 This module contains the spider that gets the play-by-play schedule for a game
 from the basketball-reference website.
 """
+
 import datetime
 
 import bs4
@@ -105,7 +105,7 @@ class PlaybyplaySpider(SRSpider):
 
                 non_null = [td for td in left_and_right if td is not None][0]
 
-                time = datetime.datetime.strptime(time, '%M:%S.0').time()
+                time = datetime.datetime.strptime(time, '%M:%S.%f').time()
                 quarter = quarter.replace('q', '')
                 q_int = int(quarter)
 

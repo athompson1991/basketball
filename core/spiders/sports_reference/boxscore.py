@@ -12,19 +12,29 @@ class BoxscoreSpider(SRSpider):
     name = 'boxscore'
 
     def __init__(self, **kwargs):
+        super().__init__()
         self.teams = None
         if "code" in kwargs.keys():
             self.codes = [kwargs["code"]]
         else:
             self.codes = get_codes()
 
+    def get_teams(self, soup):
+        scorebox = soup.find('div', {'class': 'scorebox'})
+        strongs = scorebox.find_all("strong")
+        hrefs = [strong.find("a").get("href") for strong in strongs]
+        teams = [href.split("/")[-2] for href in hrefs]
+        return teams
+
+    def minutes_played_num(self, mp):
+        t = mp.split(':')
+        return float(t[0]) + float(t[1]) / 60
+
     def parse(self, response):
+        soup = bs4.BeautifulSoup(response.text)
         code = response.url.split("/")[-1][:-5]
-        self.log("Code: " + str(code))
-        scorebox = response.css("div.scorebox")
-        teams = scorebox.xpath("//strong//a/@href").extract()
-        self.teams = [t.split("/")[-2] for t in teams]
-        for team in self.teams:
+        teams = self.get_teams(soup)
+        for team in teams:
             self.log("Code: {0}, team: {1}".format(code, team))
             find_this = "table#box-" + team.upper() + "-game-basic"
             basic_table = response.css(find_this)
@@ -46,11 +56,11 @@ class BoxscoreSpider(SRSpider):
                     stats["player"] = player
                     stats["team"] = team
                     stats['player_code'] = player_code
+                    stats['mp_num'] = self.minutes_played_num(stats['mp'])
                     item = BoxscoreItem(stats)
                     yield item
 
     def start_requests(self):
-        url_stem = BASKETBALL_REFERENCE_URL + "/boxscores/"
-        urls = [url_stem + code + ".html" for code in self.codes]
+        urls = [self.boxscore_url + code + ".html" for code in self.codes]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
