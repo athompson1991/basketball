@@ -3,7 +3,6 @@ import requests
 import scrapy
 import string
 
-# -*- coding: utf-8 -*-
 from core.constants import BASKETBALL_REFERENCE_URL
 
 
