@@ -1,14 +1,4 @@
-from core.settings import ITEM_PIPELINES
-
-PASSWORD = None
-if 'core.pipelines.PostgresPipeline' in ITEM_PIPELINES.keys():
-    PASSWORD = open("core/password").read()
-
 database_specs = {
-    "host": "localhost",
-    "database": "sports",
-    "user": "alex",
-    "password": PASSWORD,
     'tables': {
         'games': {
             'code': {'dtype': 'character(12)', 'is_primary_key': True},

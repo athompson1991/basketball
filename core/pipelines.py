@@ -3,7 +3,6 @@ import datetime
 
 from core.settings import OUTPUT_DIRECTORY
 from core.db import database_specs
-from core.utils import make_create_sql, make_insert_sql, create_connection
 
 
 class CSVPipeline(object):
@@ -34,32 +33,3 @@ class CSVPipeline(object):
         self.file.close()
 
 
-class PostgresPipeline(object):
-
-    def open_spider(self, spider):
-        self.create_table_sql = make_create_sql(
-            spider.name,
-            database_specs['tables'][spider.name]
-        )
-        self.client = create_connection()
-        cursor = self.client.cursor()
-        cursor.execute('drop table if exists ' + spider.name)
-        cursor.close()
-        self.client.commit()
-
-        cursor = self.client.cursor()
-        cursor.execute(self.create_table_sql)
-        cursor.close()
-        self.client.commit()
-
-    def process_item(self, item, spider):
-        sql_specs = database_specs['tables'][spider.name]
-        cursor = self.client.cursor()
-        self.insert_game_sql = make_insert_sql(spider.name, sql_specs)
-        cursor.execute(self.insert_game_sql, item)
-        cursor.close()
-        self.client.commit()
-
-    def close_spider(self, spider):
-        self.client.commit()
-        self.client.close()

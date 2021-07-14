@@ -1,20 +1,10 @@
 from datetime import datetime, timedelta
 
-import psycopg2
 import numpy as np
-import pandas as pd
 
 from core.settings import CODES_FILTER, ITEM_PIPELINES
 from core.db import database_specs
 
-
-def create_connection():
-    return psycopg2.connect(
-        host=database_specs['host'],
-        database=database_specs['database'],
-        user=database_specs['user'],
-        password=database_specs['password']
-    )
 
 def make_create_sql(table_name, specs):
     col_list = [key + ' ' + specs[key]['dtype'] for key in specs.keys()]
